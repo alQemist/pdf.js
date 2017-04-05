@@ -16,7 +16,9 @@
 
 'use strict';
 
-var DEFAULT_URL = 'compressed.tracemonkey-pldi-09.pdf';
+// var DEFAULT_URL = 'Spring.pdf';
+// var DEFAULT_URL = 'compressed.tracemonkey-pldi-09.pdf';
+var DEFAULT_URL = 'test.pdf';
 
 if (typeof PDFJSDev !== 'undefined' && PDFJSDev.test('CHROME')) {
   (function rewriteUrlClosure() {
@@ -93,6 +95,24 @@ function getViewerConfiguration() {
       pageRotateCcwButton: document.getElementById('pageRotateCcw'),
       toggleHandToolButton: document.getElementById('toggleHandTool'),
       documentPropertiesButton: document.getElementById('documentProperties'),
+      shareButton: document.getElementById('shareButton'),
+    },
+    pageViewsToolbar: {
+      toolbar: document.getElementById('pageViewsToolbar'),
+      toggleButton: document.getElementById('pageViewsToolbarToggle'),
+      toolbarButtonContainer: document.getElementById('pageViewsToolbarButtonContainer'),
+      modeA: document.getElementById('modeA'),
+      modeB: document.getElementById('modeB'),
+      modeC: document.getElementById('modeC'),
+    },
+    shareToolbar: {
+      secondaryToolbar: document.getElementById('secondaryToolbarButtonContainer'),
+      toolbar: document.getElementById('shareToolbar'),
+      toggleButton: document.getElementById('shareButton'),
+      toolbarButtonContainer: document.getElementById('shareToolbarButtonContainer'),
+      facebookButton: document.getElementById('facebookButton'),
+      twitterButton: document.getElementById('twitterButton'),
+      linkedinButton: document.getElementById('linkedinButton'),
     },
     fullscreen: {
       contextFirstPage: document.getElementById('contextFirstPage'),
@@ -108,11 +128,13 @@ function getViewerConfiguration() {
       // Buttons
       thumbnailButton: document.getElementById('viewThumbnail'),
       outlineButton: document.getElementById('viewOutline'),
-      attachmentsButton: document.getElementById('viewAttachments'),
+      favoriteButton: document.getElementById('viewFavorite'),
+      cartButton: document.getElementById('viewCart'),
+      // attachmentsButton: document.getElementById('viewAttachments'),
       // Views
       thumbnailView: document.getElementById('thumbnailView'),
       outlineView: document.getElementById('outlineView'),
-      attachmentsView: document.getElementById('attachmentsView'),
+      // attachmentsView: document.getElementById('attachmentsView'),
     },
     findBar: {
       bar: document.getElementById('findbar'),
@@ -160,6 +182,18 @@ function getViewerConfiguration() {
       errorMoreInfo: document.getElementById('errorMoreInfo'),
       moreInfoButton: document.getElementById('errorShowMore'),
       lessInfoButton: document.getElementById('errorShowLess'),
+    },
+    matadataConfig: {
+      default_color: '',
+      regex: '',
+      allow_print: 0,
+      allow_download: 0,
+      allow_favorite: 0,
+      productLookup: 0,
+      page_mode: '',
+      page_zoom: 0,
+      allow_share: 0,
+      allow_fullscreen: 0
     },
     printContainer: document.getElementById('printContainer'),
     openFileInputName: 'fileInput',
