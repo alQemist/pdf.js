@@ -184,6 +184,7 @@ function getViewerConfiguration() {
       lessInfoButton: document.getElementById('errorShowLess'),
     },
     matadataConfig: {
+      product_query: '',
       default_color: '',
       regex: '',
       allow_print: 0,

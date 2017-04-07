@@ -930,7 +930,7 @@ var PDFViewerApplication = {
     this.pdfDocument.getMetadata().then(function(data) {
       var metadata = data.metadata;
       var metadataConfig = self.appConfig.matadataConfig;
-      var xdata, key, itm, value;
+      var xdata, key, itm;
       if (!metadata) {
         return;
       }
@@ -939,8 +939,7 @@ var PDFViewerApplication = {
         itm = key.split(":");
         if(checkIfArray(itm) && itm.length > 0 && itm[0] === "pdfx") {
           console.log(itm[1]+ "-->" + xdata[key]);
-          value = xdata[key] ? xdata[key] : 0;
-          metadataConfig[itm[1]] = value;
+          metadataConfig[itm[1]] = xdata[key];
         }
       }
       extraUIConfig();
