@@ -930,7 +930,7 @@ var PDFViewerApplication = {
     this.pdfDocument.getMetadata().then(function(data) {
       var metadata = data.metadata;
       var metadataConfig = self.appConfig.matadataConfig;
-      var xdata, key, itm;
+      var xdata, key, itm, value;
       if (!metadata) {
         return;
       }
@@ -939,10 +939,11 @@ var PDFViewerApplication = {
         itm = key.split(":");
         if(checkIfArray(itm) && itm.length > 0 && itm[0] === "pdfx") {
           console.log(itm[1]+ "-->" + xdata[key]);
-          metadataConfig[itm[1]] = xdata[key];
+          value = xdata[key] ? xdata[key] : 0;
+          metadataConfig[itm[1]] = value;
         }
       }
-      extraConfig();
+      extraUIConfig();
     });
 
     this.pdfDocumentProperties.setDocumentAndUrl(pdfDocument, this.url);
@@ -1594,32 +1595,49 @@ function webViewerInitialized() {
   });
 }
 
-function extraConfig() {
+function extraUIConfig() {
   var appConfig = PDFViewerApplication.appConfig;
   var matadataConfig = appConfig.matadataConfig;
+  var eventBus = appConfig.eventBus || getGlobalEventBus();
 
-  if (matadataConfig["allow_print"] == 0) {
+  if (!matadataConfig["allow_print"]) {
     appConfig.toolbar.print.classList.add('hidden');
   }
 
-  if (matadataConfig["allow_download"] == 0) {
+  if (!matadataConfig["allow_download"]) {
     appConfig.toolbar.download.classList.add('hidden');
   }
 
-  if (matadataConfig["allow_favorite"] == 0) {
+  if (!matadataConfig["allow_favorite"]) {
     appConfig.sidebar.favoriteButton.classList.add('hidden');
   }
 
-  if (matadataConfig["allow_fullscreen"] == 0) {
+  if (!matadataConfig["allow_fullscreen"]) {
     appConfig.toolbar.presentationModeButton.classList.add('hidden');
   }
 
-  if (matadataConfig["allow_share"] == 0) {
+  if (!matadataConfig["allow_share"]) {
     appConfig.secondaryToolbar.shareButton.classList.add('hidden');
   }
 
-  if (matadataConfig["productLookup"] == 0) {
+  if (!matadataConfig["productLookup"]) {
     appConfig.sidebar.cartButton.classList.add('hidden');
+  }
+
+  if (matadataConfig["page_zoom"]) {
+    var zoom = parseFloat(matadataConfig["page_zoom"]);
+    if (zoom) {
+      setTimeout(function () {
+        eventBus.dispatch('scalechanged', {
+          value: zoom
+        });
+      }, 100);
+    }
+  } else {
+    // Uncommnet this to hide zoom buttons and select
+    // appConfig.toolbar.scaleSelectContainer.classList.add('hidden');
+    // appConfig.toolbar.zoomIn.classList.add('hidden');
+    // appConfig.toolbar.zoomOut.classList.add('hidden');
   }
 }
 
