@@ -72,14 +72,21 @@ var PDFProductPopup = (function PDFProductPopupClosure() {
       if (OverlayManager.active) {
         this.close();
       }
-      this._fetchProduct(sku, product_query_url);
+      Promise.all([OverlayManager.open(this.overlayName),
+        this.dataAvailablePromise]).then(function () {
+        this._fetchProduct(sku, product_query_url);
+      }.bind(this));
     },
 
     /**
      * Close the document properties overlay.
      */
     close: function PDFProductPopup_close() {
+      var options = this.options;
       OverlayManager.close(this.overlayName);
+      options.spinner.classList.remove('hidden');
+      options.productPopup.classList.add('hidden');
+      options.errorBody.classList.add('hidden');
     },
 
     /**
@@ -136,7 +143,6 @@ var PDFProductPopup = (function PDFProductPopupClosure() {
         me._showPopupBody(validProduct);
       } else {
         validProduct = true;
-        me._showPopupBody(validProduct);
         record.each(function() {
           product.sku = $(this).find('sku').text();
           product.name = $(this).find('name').text();
@@ -148,15 +154,13 @@ var PDFProductPopup = (function PDFProductPopupClosure() {
         });
       }
 
-      Promise.all([OverlayManager.open(this.overlayName),
-       this.dataAvailablePromise]).then(function () {
-         if (validProduct) {
-           for (var identifier in product) {
-             me._updateUI(me.fields[identifier], product[identifier]);
-           }
-           me._updateUI(me.fields["image"], product["image"], true);
-         }
-       }.bind(this));
+      if (validProduct) {
+        for (var identifier in product) {
+          me._updateUI(me.fields[identifier], product[identifier]);
+        }
+        me._updateUI(me.fields["image"], product["image"], true);
+      }
+      me._showPopupBody(validProduct);
     },
 
     /**
@@ -168,6 +172,7 @@ var PDFProductPopup = (function PDFProductPopupClosure() {
       var options = me.options;
       var actions = ['add', 'remove'];
 
+      options.spinner.classList.add('hidden');
       options.productPopup.classList[actions[show + 0]]('hidden');
       options.errorBody.classList[actions[!show + 0]]('hidden');
     },

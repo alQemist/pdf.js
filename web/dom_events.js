@@ -71,6 +71,7 @@
         var event2 = document.createEvent('CustomEvent');
         event2.initCustomEvent('regex_initial_search', true, true, null);
         eventBus.dispatch('regex_initial_search', {
+          //TODO just testing catalogs
           /*isRegex: true,
           regex: new RegExp(/[0-9]{5}/, 'g'),*/
           query: '__',

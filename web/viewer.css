@@ -1707,7 +1707,6 @@ html[dir='rtl'] #documentPropertiesOverlay .row > * {
 }
 
 #productPopupOverlay .image {
-  width: 250px;
   height: 280px;
   text-align: center;
   display: block;
@@ -1722,6 +1721,66 @@ html[dir='rtl'] #documentPropertiesOverlay .row > * {
   font-weight: bold;
   color: #EF2323 !important;
 }
+
+@keyframes spin_simple {
+  to { transform: rotate(1turn); }
+}
+
+.progress_popup {
+  position: relative;
+  display: inline-block;
+  width: 5em;
+  height: 5em;
+  margin: 0 .5em;
+  font-size: 12px;
+  text-indent: 999em;
+  overflow: hidden;
+  animation: spin_simple 1s infinite steps(8);
+}
+
+.small.progress_popup {
+  font-size: 6px;
+}
+
+.large.progress_popup {
+  font-size: 24px;
+}
+
+.progress_popup:before,
+.progress_popup:after,
+.progress_popup > div:before,
+.progress_popup > div:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 2.25em; /* (container width - part width)/2  */
+  width: .5em;
+  height: 1.5em;
+  border-radius: .2em;
+  background: #eee;
+  box-shadow: 0 3.5em #eee; /* container height - part height */
+  transform-origin: 50% 2.5em; /* container height / 2 */
+}
+
+.progress_popup:before {
+  background: #555;
+}
+
+.progress_popup:after {
+  transform: rotate(-45deg);
+  background: #777;
+}
+
+.progress_popup > div:before {
+  transform: rotate(-90deg);
+  background: #999;
+}
+
+.progress_popup > div:after {
+  transform: rotate(-135deg);
+  background: #bbb;
+}
+
 
 #productPopupOverlay .error_body {
   text-align: center;
@@ -2272,3 +2331,4 @@ html[dir='rtl'] #productPopupOverlay .row > * {
     display: none;
   }
 }
+
