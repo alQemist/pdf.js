@@ -24,6 +24,7 @@ See https://github.com/adobe-type-tools/cmap-resources
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 <!--#if GENERIC || CHROME-->
     <meta name="google" content="notranslate">
 <!--#endif-->
@@ -367,6 +368,8 @@ See https://github.com/adobe-type-tools/cmap-resources
             </div>
           </div>
         </div>
+
+        <!--Document properties-->
         <div id="documentPropertiesOverlay" class="container hidden">
           <div class="dialog">
             <div class="row">
@@ -412,6 +415,54 @@ See https://github.com/adobe-type-tools/cmap-resources
             </div>
           </div>
         </div>
+
+
+        <!--Product popup-->
+        <div id="productPopupOverlay" class="container hidden">
+          <div id="productPopup" class="dialog hidden">
+            <div class="row title_row">
+              <div class="title" id="productSkuField">---</div>
+              <button id="productPopupClose" class="close_icon"> X </button>
+            </div>
+            <div class="popup_body">
+              <div class="row product_row">
+                <img class="image" id="productImageField">
+              </div>
+              <div class="row">
+                <p class="description" id="productDescriptionField">-</p>
+              </div>
+              <div class="row">
+                <strong class="info">
+                  <span data-l10n-id="product_popup_price">Price:</span>
+                  $<span id="productPriceField">-</span>
+                </strong>
+              </div>
+              <div class="row">
+                <strong class="info">
+                  <span id="productAvailableField">-</span>
+                </strong>
+              </div>
+              <div class="row">
+                <strong class="info info_link">
+                  <span id="productAddToCartField">Add to cart</span>
+                  <span id="productViewCartField"> View cart </span>
+                </strong>
+              </div>
+            </div>
+          </div>
+          <!--Error message  -->
+          <div id="errorPopup" class="dialog hidden">
+            <div class="row title_row">
+              <div class="title_error">Error!</div>
+              <button id="popupErrorClose" class="close_icon"> X </button>
+            </div>
+            <div class="error_body">
+              <div> Something went wrong. </div>
+              <div> Please try again. </div>
+            </div>
+          </div>
+        </div>
+
 <!--#if !(FIREFOX || MOZCENTRAL)-->
         <div id="printServiceOverlay" class="container hidden">
           <div class="dialog">

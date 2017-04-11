@@ -1630,6 +1630,125 @@ html[dir='rtl'] #documentPropertiesOverlay .row > * {
   margin-top: 10px;
 }
 
+#productPopupOverlay > .dialog {
+  background: #F0F0F0 !important;
+  text-align: left;
+  color: black !important;
+  width: 35%;
+  padding: 0 !important;
+}
+
+#productPopupOverlay .row > * {
+  min-width: 100px;
+}
+
+#productPopupOverlay .product_row {
+  display: block;
+}
+
+#productPopupOverlay .title_row {
+  display: block;
+  background: #474747;
+  padding: 10px;
+  position: relative;
+}
+
+#productPopupOverlay .title {
+  display: block;
+  text-align: center !important;
+  font-size: 25px;
+  font-weight: bold;
+  color: #C5C5C5; !important;
+}
+
+#productPopupOverlay .popup_body {
+  padding: 10px 50px;
+}
+
+#productPopupOverlay .description {
+  width: 80%;
+  height: 40px;
+  overflow-y: scroll;
+  margin: auto;
+  font-size: 14px;
+}
+
+#productPopupOverlay .close_icon {
+  position: absolute;
+  background: rgba(71, 71, 71, 0.68);
+  right: -9px;
+  border-radius: 50px;
+  min-width: 0 !important;
+  display: block;
+  padding: 2px 5px;
+  border: 2px solid white;
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  top: -8px;
+}
+
+#productPopupOverlay .info {
+  text-align: center !important;
+  display: block;
+  margin: 15px 0px;
+  font-size: 18px;
+}
+
+#productPopupOverlay .info_link {
+  color: #3D8AF8;
+  font-size: 20px;
+}
+
+.info_link > span {
+  margin-left: 7px;
+  cursor: pointer;
+}
+
+#productPopupOverlay .image {
+  width: 250px;
+  height: 280px;
+  text-align: center;
+  display: block;
+  border-radius: 10px;
+  margin: 10px auto 15px auto;
+}
+
+#productPopupOverlay .title_error {
+  display: block;
+  text-align: center !important;
+  font-size: 25px;
+  font-weight: bold;
+  color: #EF2323 !important;
+}
+
+#productPopupOverlay .error_body {
+  text-align: center;
+  font-size: 20px;
+  padding: 20px;
+  line-height: 30px;
+}
+
+html[dir='ltr'] #productPopupOverlay .row > * {
+  text-align: left;
+}
+html[dir='rtl'] #productPopupOverlay .row > * {
+  text-align: right;
+}
+#productPopupOverlay .row > span {
+  width: 125px;
+  word-wrap: break-word;
+}
+#documentPropertiesOverlay .row > p {
+  max-width: 225px;
+  word-wrap: break-word;
+}
+
+#productPopupOverlay .buttonRow {
+  margin-top: 10px;
+}
+
 .clearBoth {
   clear: both;
 }

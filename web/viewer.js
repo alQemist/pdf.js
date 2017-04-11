@@ -16,7 +16,7 @@
 
 'use strict';
 
-//var DEFAULT_URL = 'Spring.pdf';
+// var DEFAULT_URL = 'Spring.pdf';
 // var DEFAULT_URL = 'compressed.tracemonkey-pldi-09.pdf';
 var DEFAULT_URL = 'test.pdf';
 
@@ -173,6 +173,21 @@ function getViewerConfiguration() {
         'producer': document.getElementById('producerField'),
         'version': document.getElementById('versionField'),
         'pageCount': document.getElementById('pageCountField')
+      }
+    },
+    productPopup: {
+      overlayName: 'productPopupOverlay',
+      container: document.getElementById('productPopupOverlay'),
+      productPopup: document.getElementById('productPopup'),
+      closeButton: document.getElementById('productPopupClose'),
+      popupErrorClose: document.getElementById('popupErrorClose'),
+      errorBody: document.getElementById('errorPopup'),
+      fields: {
+        'image': document.getElementById('productImageField'),
+        'sku': document.getElementById('productSkuField'),
+        'description': document.getElementById('productDescriptionField'),
+        'price': document.getElementById('productPriceField'),
+        'available': document.getElementById('productAvailableField'),
       }
     },
     errorWrapper: {

@@ -192,6 +192,7 @@ var TextLayerBuilder = (function TextLayerBuilderClosure() {
         return;
       }
 
+      var me = this;
       var appConfig = PDFViewerApplication.appConfig;
       var matadataConfig = appConfig.matadataConfig;
       var regexColor = matadataConfig['default_color'] || '';
@@ -227,7 +228,9 @@ var TextLayerBuilder = (function TextLayerBuilderClosure() {
             span.className = extraOptions.className;
             span.style.backgroundColor = regexColor;
             span.addEventListener('click', function() {
-              alert("You clicked on: " + node.nodeValue);
+              me.eventBus.dispatch('productdetails', {
+                sku: node.nodeValue
+              });
             });
           }
           span.className += ' ' + className;

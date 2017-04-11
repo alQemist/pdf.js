@@ -71,13 +71,27 @@
         var event2 = document.createEvent('CustomEvent');
         event2.initCustomEvent('regex_initial_search', true, true, null);
         eventBus.dispatch('regex_initial_search', {
+          /*isRegex: true,
+          regex: new RegExp(/[0-9]{5}/, 'g'),*/
           query: '__',
           isRegex: matadataConfig['regex'] ? true : false,
           regex: regex,
           caseSensitive: false,
           highlightAll: true,
           phraseSearch: false});
-      }, 100);
+      }, 50);
+    });
+
+    eventBus.on('productdetails', function (e) {
+      var sku = e.sku;
+      var appConfig = PDFViewerApplication.appConfig;
+      var matadataConfig = appConfig.matadataConfig;
+      var product_query_url = matadataConfig["product_query"];
+      // var product_query_url = "http://www.forestry-suppliers.com/icat/productLookup.asp";
+
+      if (sku && product_query_url) {
+        PDFViewerApplication.pdfProductPopup.open(sku, product_query_url);
+      }
     });
 
     eventBus.on('pagesloaded', function (e) {
