@@ -132,6 +132,37 @@ var PDFProductPopup = (function PDFProductPopupClosure() {
       xmlhttp.send();
     },
 
+    // Production ready fetch
+    /*_fetchProduct: function PDFProductPopup_fetchProduct(sku, product_query_url) {
+      var me = this;
+      var re = new RegExp(/\[SKU\]/g);
+      var U = product_query_url;
+      var host = (config.domain).split('.');
+      host = host[1] + '.' + host[2];
+
+      // in the case of being hosted on a subdomain  the url will be modified to match the domain...
+      if (U.indexOf('[host]') > -1) {
+        U = U.replace("[host]", host)
+      }
+      // replace the placeholder in the string with the actual SKU value
+      U = U.replace(re, txt);
+
+      // request is made through a proxy to avoid issues with cross-domain request...
+      var productURL = "/proxyRequest.php?url=" + encodeURIComponent(U);
+
+      $.ajax({
+        type: 'GET',
+        url: productURL,
+        cache: false,
+        crossDomain: false,
+        dataType: 'xml',
+        success: me._parseProduct,
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+          me._showPopupBody(false);
+        }
+      });
+    },*/
+
     _parseProduct: function PDFProductPopup_parseProduct(xml) {
       var me = this;
       var parsedXML = $.parseXML(xml);
