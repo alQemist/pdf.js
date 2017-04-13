@@ -113,9 +113,8 @@ var PDFProductPopup = (function PDFProductPopupClosure() {
      */
     _fetchProduct: function PDFProductPopup_fetchProduct(sku, product_query_url) {
       var me = this;
-      var productURL = product_query_url + "?SKU=" + sku;
+      var productURL = product_query_url + sku;
       var xmlhttp = new XMLHttpRequest();
-      // var productURL = "http://www.forestry-suppliers.com/icat/productLookup.asp?SKU=" + sku;
 
       xmlhttp.onreadystatechange = function() {
         if (xmlhttp.readyState == XMLHttpRequest.DONE ) {

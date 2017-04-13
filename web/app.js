@@ -25,8 +25,8 @@
       'pdfjs-web/toolbar', 'pdfjs-web/secondary_toolbar',
       'pdfjs-web/pages_views_toolbar', 'pdfjs-web/share_toolbar',
       'pdfjs-web/password_prompt', 'pdfjs-web/pdf_presentation_mode',
-      'pdfjs-web/pdf_document_properties', 'pdfjs-web/product_popup', 'pdfjs-web/hand_tool',
-      'pdfjs-web/pdf_viewer', 'pdfjs-web/pdf_rendering_queue',
+      'pdfjs-web/pdf_document_properties', 'pdfjs-web/product_popup', 'pdfjs-web/publisher_popup',
+      'pdfjs-web/hand_tool', 'pdfjs-web/pdf_viewer', 'pdfjs-web/pdf_rendering_queue',
       'pdfjs-web/pdf_link_service', 'pdfjs-web/pdf_outline_viewer',
       'pdfjs-web/overlay_manager', 'pdfjs-web/pdf_attachment_viewer',
       'pdfjs-web/pdf_find_controller', 'pdfjs-web/pdf_find_bar',
@@ -40,7 +40,8 @@
       require('./secondary_toolbar.js'),
       require('./pages_views_toolbar.js'), require('./share_toolbar.js'),
       require('./password_prompt.js'), require('./pdf_presentation_mode.js'),
-      require('./pdf_document_properties.js'), require('./product_popup.js'), require('./hand_tool.js'),
+      require('./pdf_document_properties.js'), require('./product_popup.js'),
+      require('./publisher_popup.js'), require('./hand_tool.js'),
       require('./pdf_viewer.js'), require('./pdf_rendering_queue.js'),
       require('./pdf_link_service.js'), require('./pdf_outline_viewer.js'),
       require('./overlay_manager.js'), require('./pdf_attachment_viewer.js'),
@@ -54,7 +55,8 @@
       root.pdfjsWebToolbar, root.pdfjsWebSecondaryToolbar,
       root.pdfjsWebPageViewsToolbar, root.pdfjsWebShareToolbar,
       root.pdfjsWebPasswordPrompt, root.pdfjsWebPDFPresentationMode,
-      root.pdfjsWebPDFDocumentProperties, root.pdfjsWebProductPopup, root.pdfjsWebHandTool,
+      root.pdfjsWebPDFDocumentProperties, root.pdfjsWebProductPopup,
+      root.pdfjsPublisherPopup, root.pdfjsWebHandTool,
       root.pdfjsWebPDFViewer, root.pdfjsWebPDFRenderingQueue,
       root.pdfjsWebPDFLinkService, root.pdfjsWebPDFOutlineViewer,
       root.pdfjsWebOverlayManager, root.pdfjsWebPDFAttachmentViewer,
@@ -66,7 +68,8 @@
                   pdfThumbnailViewerLib, toolbarLib, secondaryToolbarLib,
                   pageViewsToolbarLib, shareToolbarLib,
                   passwordPromptLib, pdfPresentationModeLib,
-                  pdfDocumentPropertiesLib, pdfProductPopupLib, handToolLib, pdfViewerLib,
+                  pdfDocumentPropertiesLib, pdfProductPopupLib,
+                  pdfPublisherPopupLib, handToolLib, pdfViewerLib,
                   pdfRenderingQueueLib, pdfLinkServiceLib, pdfOutlineViewerLib,
                   overlayManagerLib, pdfAttachmentViewerLib,
                   pdfFindControllerLib, pdfFindBarLib, domEventsLib, pdfjsLib) {
@@ -94,6 +97,7 @@ var PasswordPrompt = passwordPromptLib.PasswordPrompt;
 var PDFPresentationMode = pdfPresentationModeLib.PDFPresentationMode;
 var PDFDocumentProperties = pdfDocumentPropertiesLib.PDFDocumentProperties;
 var PDFProductPopup = pdfProductPopupLib.PDFProductPopup;
+var PDFPublisherPopup = pdfPublisherPopupLib.PDFPublisherPopup;
 var HandTool = handToolLib.HandTool;
 var PresentationModeState = pdfViewerLib.PresentationModeState;
 var PDFViewer = pdfViewerLib.PDFViewer;
@@ -168,6 +172,8 @@ var PDFViewerApplication = {
   pdfDocumentProperties: null,
   /** @type {PDFProductPopup} */
   pdfProductPopup: null,
+  /** @type {PDFPublisherPopup} */
+  pdfPublisherPopup: null,
   /** @type {PDFLinkService} */
   pdfLinkService: null,
   /** @type {PDFHistory} */
@@ -417,6 +423,9 @@ var PDFViewerApplication = {
 
       self.pdfProductPopup =
         new PDFProductPopup(appConfig.productPopup);
+
+      self.pdfPublisherPopup =
+        new PDFPublisherPopup(appConfig.publisherPopup);
 
       self.toolbar = new Toolbar(appConfig.toolbar, container, eventBus);
 
@@ -953,6 +962,7 @@ var PDFViewerApplication = {
 
     this.pdfDocumentProperties.setDocumentAndUrl(pdfDocument, this.url);
     this.pdfProductPopup.setDocumentAndUrl(pdfDocument, this.url);
+    this.pdfPublisherPopup.setDocumentAndUrl(pdfDocument, this.url);
 
     var downloadedPromise = pdfDocument.getDownloadInfo().then(function() {
       self.downloadComplete = true;
@@ -1359,6 +1369,7 @@ var PDFViewerApplication = {
     eventBus.on('rotatecw', webViewerRotateCw);
     eventBus.on('rotateccw', webViewerRotateCcw);
     eventBus.on('documentproperties', webViewerDocumentProperties);
+    eventBus.on('publisherinfo', webViewerPublisherPopup);
     eventBus.on('find', webViewerFind);
     eventBus.on('findfromurlhash', webViewerFindFromUrlHash);
     if (typeof PDFJSDev === 'undefined' || PDFJSDev.test('GENERIC')) {
@@ -1961,6 +1972,10 @@ function webViewerRotateCcw() {
 }
 function webViewerDocumentProperties() {
   PDFViewerApplication.pdfDocumentProperties.open();
+}
+
+function webViewerPublisherPopup() {
+  PDFViewerApplication.pdfPublisherPopup.open();
 }
 
 function webViewerFind(e) {

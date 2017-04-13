@@ -18,7 +18,7 @@
 
 var DEFAULT_URL = 'Spring.pdf';
 // var DEFAULT_URL = 'compressed.tracemonkey-pldi-09.pdf';
-// var DEFAULT_URL = 'test.pdf';
+var DEFAULT_URL = 'test.pdf';
 
 if (typeof PDFJSDev !== 'undefined' && PDFJSDev.test('CHROME')) {
   (function rewriteUrlClosure() {
@@ -94,7 +94,8 @@ function getViewerConfiguration() {
       pageRotateCwButton: document.getElementById('pageRotateCw'),
       pageRotateCcwButton: document.getElementById('pageRotateCcw'),
       toggleHandToolButton: document.getElementById('toggleHandTool'),
-      documentPropertiesButton: document.getElementById('documentProperties'),
+      publisherButton: document.getElementById('publisherInfoButton'),
+      // documentPropertiesButton: document.getElementById('documentProperties'),
       shareButton: document.getElementById('shareButton'),
     },
     pageViewsToolbar: {
@@ -191,26 +192,66 @@ function getViewerConfiguration() {
         'available': document.getElementById('productAvailableField'),
       }
     },
+    publisherPopup: {
+      overlayName: 'publisherPopupOverlay',
+      container: document.getElementById('publisherPopupOverlay'),
+      publisherPopup: document.getElementById('publisherPopup'),
+      closeButton: document.getElementById('publisherPopupClose'),
+      fields: {
+        'company': document.getElementById('publisherCompanyField'),
+        'address1': document.getElementById('publisherAddress1Field'),
+        'address2': document.getElementById('publisherAddress2Field'),
+        'city': document.getElementById('publisherCityField'),
+        'state': document.getElementById('publisherStateField'),
+        'zip': document.getElementById('publisherZipField'),
+        'country': document.getElementById('publisherCountryField'),
+        'company_email': document.getElementById('publisherEmailField'),
+        'phone': document.getElementById('publisherPhoneField'),
+        'weburl': document.getElementById('publisherWebField'),
+      }
+    },
     errorWrapper: {
       container: document.getElementById('errorWrapper'),
       errorMessage: document.getElementById('errorMessage'),
       closeButton: document.getElementById('errorClose'),
       errorMoreInfo: document.getElementById('errorMoreInfo'),
       moreInfoButton: document.getElementById('errorShowMore'),
-      lessInfoButton: document.getElementById('errorShowLess'),
+      lessInfoButton: document.getElementById('errorShowLess')
     },
     matadataConfig: {
-      product_query: '',
-      default_color: '',
+      // Shopping variables
+      product_query_url: '',
+      checkout_url: '',
       regex: '',
-      allow_print: 0,
-      allow_download: 0,
-      allow_favorite: 0,
-      productLookup: 0,
+      productLookup: '',
+
+      // General properties
+      title: '',
+      default_color: '',
+      page_offset: '0',
+      allow_download: '1',
+      allow_print: '1',
+      allow_share: '1',
+      allow_favorite: '1',
       page_mode: '',
       page_zoom: 0,
-      allow_share: 0,
-      allow_fullscreen: 0
+      allow_fullscreen: 0,
+
+      // Publisher Info
+      company: '',
+      address1: '',
+      address2: '',
+      city: '',
+      state: '',
+      zip: '',
+      country: '',
+      company_email: '',
+      phone: '',
+      weburl: '',
+
+      // Data Model
+      accountid: '',
+      pubid: ''
     },
     printContainer: document.getElementById('printContainer'),
     openFileInputName: 'fileInput',

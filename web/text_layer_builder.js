@@ -195,7 +195,7 @@ var TextLayerBuilder = (function TextLayerBuilderClosure() {
       var me = this;
       var appConfig = PDFViewerApplication.appConfig;
       var matadataConfig = appConfig.matadataConfig;
-      var regexColor = matadataConfig['default_color'] || '';
+      var regexColor = matadataConfig['default_color'] || '#006400';
 
       var extraOptions = options || {};
       var isRegex = extraOptions.isRegex;

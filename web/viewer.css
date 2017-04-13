@@ -1706,6 +1706,11 @@ html[dir='rtl'] #documentPropertiesOverlay .row > * {
   cursor: pointer;
 }
 
+.info_link > span:hover {
+  color: #2853f8;
+  font-size: 22px;
+}
+
 #productPopupOverlay .image {
   height: 280px;
   text-align: center;
@@ -1736,6 +1741,12 @@ html[dir='rtl'] #documentPropertiesOverlay .row > * {
   text-indent: 999em;
   overflow: hidden;
   animation: spin_simple 1s infinite steps(8);
+}
+
+#publisherPopupOverlay .title {
+    font-size: 21px;
+    text-decoration: underline;
+    margin-bottom: 15px;
 }
 
 .small.progress_popup {
