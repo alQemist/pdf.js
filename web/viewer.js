@@ -18,7 +18,7 @@
 
 var DEFAULT_URL = 'Spring.pdf';
 // var DEFAULT_URL = 'compressed.tracemonkey-pldi-09.pdf';
-var DEFAULT_URL = 'test.pdf';
+//var DEFAULT_URL = 'test.pdf';
 
 if (typeof PDFJSDev !== 'undefined' && PDFJSDev.test('CHROME')) {
   (function rewriteUrlClosure() {
@@ -56,6 +56,7 @@ if (typeof PDFJSDev !== 'undefined' && PDFJSDev.test('CHROME || GENERIC')) {
 
 function getViewerConfiguration() {
   return {
+    DEBUG_MODE: true,
     appContainer: document.body,
     mainContainer: document.getElementById('viewerContainer'),
     viewerContainer: document.getElementById('viewer'),

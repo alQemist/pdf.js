@@ -118,6 +118,7 @@ var PDFProductPopup = (function PDFProductPopupClosure() {
 
       xmlhttp.onreadystatechange = function() {
         if (xmlhttp.readyState == XMLHttpRequest.DONE ) {
+          me._trace(xmlhttp);
           if (xmlhttp.status == 200) {
             me._parseProduct(xmlhttp.responseText);
           } else {
@@ -170,7 +171,7 @@ var PDFProductPopup = (function PDFProductPopupClosure() {
       var record = $(parsedXML).find('record');
 
       if(record.length < 1) {
-        me._showPopupBody(validProduct);
+        console.log("ERROR - There are 0 products in the response.");
       } else {
         validProduct = true;
         record.each(function() {
@@ -216,6 +217,22 @@ var PDFProductPopup = (function PDFProductPopupClosure() {
       if (field && content !== undefined && content !== '') {
         field[isImage ? "src" : "textContent"] = content;
       }
+    },
+
+    /**
+     * @private
+     * View request logs
+     */
+    _trace: function PDFProductPopup_trace(xmlhttp) {
+      var appConfig = PDFViewerApplication.appConfig;
+      if (!appConfig.DEBUG_MODE) {
+        return;
+      }
+      console.log("%c-------- Trace Log -------", "font-weight: bolder");
+      console.log("Request URL -> " + xmlhttp.responseURL);
+      console.log("Request status -> " + xmlhttp.status);
+      console.log("Request status text -> " + xmlhttp.statusText);
+      console.log("Request response text -> \n" + xmlhttp.response);
     }
   };
 

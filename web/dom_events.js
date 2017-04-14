@@ -74,9 +74,9 @@
           //TODO just testing catalogs
           // isRegex: true,
           // regex: new RegExp(/[0-9]{5}/, 'g'),
-          query: '__',
           isRegex: matadataConfig['regex'] ? true : false,
           regex: regex,
+          query: '__',
           caseSensitive: false,
           highlightAll: true,
           phraseSearch: false});
@@ -92,6 +92,8 @@
 
       if (sku && product_query_url) {
         PDFViewerApplication.pdfProductPopup.open(sku, product_query_url);
+      } else {
+        console.log("ERROR - There is no product URL or valid SKU");
       }
     });
 
