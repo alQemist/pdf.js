@@ -113,9 +113,11 @@ var PDFProductPopup = (function PDFProductPopupClosure() {
      */
     _fetchProduct: function PDFProductPopup_fetchProduct(sku, product_query_url) {
       var me = this;
-      var productURL = product_query_url + sku;
+      var productURL = product_query_url;
+      var re = new RegExp(/\[SKU\]/g);
       var xmlhttp = new XMLHttpRequest();
 
+      productURL = productURL.replace(re, sku);
       xmlhttp.onreadystatechange = function() {
         if (xmlhttp.readyState == XMLHttpRequest.DONE ) {
           me._trace(xmlhttp);

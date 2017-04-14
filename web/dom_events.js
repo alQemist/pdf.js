@@ -88,7 +88,7 @@
       var appConfig = PDFViewerApplication.appConfig;
       var matadataConfig = appConfig.matadataConfig;
       var product_query_url = matadataConfig["product_query_url"] || matadataConfig["productLookup"];
-      // var product_query_url = "http://www.forestry-suppliers.com/icat/productLookup.asp?SKU=";
+      // var product_query_url = "http://www.forestry-suppliers.com/icat/productLookup.asp?SKU=[SKU]";
 
       if (sku && product_query_url) {
         PDFViewerApplication.pdfProductPopup.open(sku, product_query_url);
