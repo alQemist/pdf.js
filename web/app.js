@@ -27,7 +27,7 @@
       'pdfjs-web/password_prompt', 'pdfjs-web/pdf_presentation_mode',
       'pdfjs-web/pdf_document_properties', 'pdfjs-web/product_popup', 'pdfjs-web/publisher_popup',
       'pdfjs-web/hand_tool', 'pdfjs-web/pdf_viewer', 'pdfjs-web/pdf_rendering_queue',
-      'pdfjs-web/pdf_link_service', 'pdfjs-web/pdf_outline_viewer',
+      'pdfjs-web/pdf_link_service', 'pdfjs-web/pdf_outline_viewer', 'pdfjs-web/pdf_cart_viewer',
       'pdfjs-web/overlay_manager', 'pdfjs-web/pdf_attachment_viewer',
       'pdfjs-web/pdf_find_controller', 'pdfjs-web/pdf_find_bar',
       'pdfjs-web/dom_events', 'pdfjs-web/pdfjs'],
@@ -44,6 +44,7 @@
       require('./publisher_popup.js'), require('./hand_tool.js'),
       require('./pdf_viewer.js'), require('./pdf_rendering_queue.js'),
       require('./pdf_link_service.js'), require('./pdf_outline_viewer.js'),
+      require('./pdf_cart_viewer.js'),
       require('./overlay_manager.js'), require('./pdf_attachment_viewer.js'),
       require('./pdf_find_controller.js'), require('./pdf_find_bar.js'),
       require('./dom_events.js'), require('./pdfjs.js'));
@@ -59,6 +60,7 @@
       root.pdfjsPublisherPopup, root.pdfjsWebHandTool,
       root.pdfjsWebPDFViewer, root.pdfjsWebPDFRenderingQueue,
       root.pdfjsWebPDFLinkService, root.pdfjsWebPDFOutlineViewer,
+      root.pdfjsWebPDFCartViewer,
       root.pdfjsWebOverlayManager, root.pdfjsWebPDFAttachmentViewer,
       root.pdfjsWebPDFFindController, root.pdfjsWebPDFFindBar,
       root.pdfjsWebDOMEvents, root.pdfjsWebPDFJS);
@@ -71,7 +73,7 @@
                   pdfDocumentPropertiesLib, pdfProductPopupLib,
                   pdfPublisherPopupLib, handToolLib, pdfViewerLib,
                   pdfRenderingQueueLib, pdfLinkServiceLib, pdfOutlineViewerLib,
-                  overlayManagerLib, pdfAttachmentViewerLib,
+                  pdfCartViewerLib, overlayManagerLib, pdfAttachmentViewerLib,
                   pdfFindControllerLib, pdfFindBarLib, domEventsLib, pdfjsLib) {
 
 var UNKNOWN_SCALE = uiUtilsLib.UNKNOWN_SCALE;
@@ -105,6 +107,7 @@ var RenderingStates = pdfRenderingQueueLib.RenderingStates;
 var PDFRenderingQueue = pdfRenderingQueueLib.PDFRenderingQueue;
 var PDFLinkService = pdfLinkServiceLib.PDFLinkService;
 var PDFOutlineViewer = pdfOutlineViewerLib.PDFOutlineViewer;
+var PDFCartViewer = pdfCartViewerLib.PDFCartViewer;
 var OverlayManager = overlayManagerLib.OverlayManager;
 var PDFAttachmentViewer = pdfAttachmentViewerLib.PDFAttachmentViewer;
 var PDFFindController = pdfFindControllerLib.PDFFindController;
@@ -182,6 +185,8 @@ var PDFViewerApplication = {
   pdfSidebar: null,
   /** @type {PDFOutlineViewer} */
   pdfOutlineViewer: null,
+  /** @type {PDFCartViewer} */
+  pdfCartViewer: null,
   /** @type {PDFAttachmentViewer} */
   pdfAttachmentViewer: null,
   /** @type {ViewHistory} */
@@ -422,7 +427,7 @@ var PDFViewerApplication = {
         new PDFDocumentProperties(appConfig.documentProperties);
 
       self.pdfProductPopup =
-        new PDFProductPopup(appConfig.productPopup);
+        new PDFProductPopup(appConfig.productPopup, eventBus);
 
       self.pdfPublisherPopup =
         new PDFPublisherPopup(appConfig.publisherPopup);
@@ -456,6 +461,15 @@ var PDFViewerApplication = {
         linkService: pdfLinkService,
       });
 
+      self.pdfCartViewer = new PDFCartViewer({
+        container: appConfig.sidebar.cartView,
+        cartTotal: appConfig.sidebar.cartTotal,
+        cartProducts: appConfig.sidebar.cartProducts,
+        cartCheckout: appConfig.sidebar.cartCheckout,
+        eventBus: eventBus,
+        linkService: pdfLinkService,
+      });
+
       self.pdfAttachmentViewer = new PDFAttachmentViewer({
         container: appConfig.sidebar.attachmentsView,
         eventBus: eventBus,
@@ -467,6 +481,7 @@ var PDFViewerApplication = {
       sidebarConfig.pdfViewer = self.pdfViewer;
       sidebarConfig.pdfThumbnailViewer = self.pdfThumbnailViewer;
       sidebarConfig.pdfOutlineViewer = self.pdfOutlineViewer;
+      sidebarConfig.pdfCartViewer = self.pdfCartViewer;
       sidebarConfig.eventBus = eventBus;
       self.pdfSidebar = new PDFSidebar(sidebarConfig);
       self.pdfSidebar.onToggled = self.forceRendering.bind(self);
@@ -654,6 +669,7 @@ var PDFViewerApplication = {
 
     this.pdfSidebar.reset();
     this.pdfOutlineViewer.reset();
+    // this.pdfCartViewer.reset();
     this.pdfAttachmentViewer.reset();
 
     this.findController.reset();
@@ -1769,6 +1785,9 @@ function webViewerPageMode(e) {
     case 'bookmarks':
     case 'outline':
       view = SidebarView.OUTLINE;
+      break;
+    case 'cart':
+      view = SidebarView.CART;
       break;
     case 'attachments':
       view = SidebarView.ATTACHMENTS;

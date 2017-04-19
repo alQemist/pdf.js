@@ -98,6 +98,20 @@ See https://github.com/adobe-type-tools/cmap-resources
           </div>
           <div id="outlineView" class="hidden">
           </div>
+          <div id="cartView" class="hidden">
+            <div id="cartCheckout" class="product_checkout">
+              <div class="remove_btn"> Checkout </div>
+              <div class="total_checkout">
+                <span>
+                  Total:
+                </span>
+                <span id="cartTotal">
+                  0
+                </span>
+              </div>
+            </div>
+            <div id="cartProducts"></div>
+          </div>
           <!--<div id="attachmentsView" class="hidden">
           </div>-->
         </div>
@@ -293,7 +307,7 @@ See https://github.com/adobe-type-tools/cmap-resources
                     <span data-l10n-id="zoom_in_label">Zoom In</span>
                    </button>
                 </div>
-                <span id="scaleSelectContainer" class="dropdownToolbarButton">
+                <span id="scaleSelectContainer" class="dropdownToolbarButton safari_dropdown">
                   <select id="scaleSelect" title="Zoom" tabindex="23" data-l10n-id="zoom">
                     <option id="pageAutoOption" title="" value="auto" selected="selected" data-l10n-id="page_scale_auto">Automatic Zoom</option>
                     <option id="pageActualOption" title="" value="page-actual" data-l10n-id="page_scale_actual">Actual Size</option>
@@ -505,7 +519,7 @@ See https://github.com/adobe-type-tools/cmap-resources
               <div class="row">
                 <strong class="info info_link">
                   <span id="productAddToCartField">Add to cart</span>
-                  <span id="productViewCartField"> View cart </span>
+                  <span id="productShowCartField"> View cart </span>
                 </strong>
               </div>
             </div>

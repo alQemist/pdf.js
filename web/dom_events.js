@@ -97,6 +97,18 @@
       }
     });
 
+    eventBus.on('addtocart', function (e) {
+      var product = e.product;
+      if (!product) {
+        return;
+      }
+      PDFViewerApplication.pdfCartViewer.addProduct(product);
+    });
+
+    eventBus.on('showcart', function (e) {
+      PDFViewerApplication.pdfSidebar.show_cart_view();
+    });
+
     eventBus.on('pagesloaded', function (e) {
       var event = document.createEvent('CustomEvent');
       event.initCustomEvent('pagesloaded', true, true, {

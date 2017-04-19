@@ -45,7 +45,9 @@ var PDFProductPopup = (function PDFProductPopupClosure() {
    * @constructs PDFProductPopup
    * @param {PDFProductPopupOptions} options
    */
-  function PDFProductPopup(options) {
+  function PDFProductPopup(options, eventBus) {
+    var me = this;
+    this.eventBus = eventBus;
     this.options = options;
     this.fields = options.fields;
     this.overlayName = options.overlayName;
@@ -54,7 +56,25 @@ var PDFProductPopup = (function PDFProductPopupClosure() {
     // Bind the event listener for the Close button.
     if (options.closeButton) {
       options.closeButton.addEventListener('click', this.close.bind(this));
+    }
+    if (options.popupErrorClose) {
       options.popupErrorClose.addEventListener('click', this.close.bind(this));
+    }
+    if (options.addToCartField) {
+      options.addToCartField.addEventListener('click', function () {
+        if (!me.current_product) {
+          return;
+        }
+        me.eventBus.dispatch('addtocart', {
+          product: me.current_product
+        });
+      });
+    }
+    if (options.showCartField) {
+      options.showCartField.addEventListener('click', function () {
+        me.eventBus.dispatch('showcart');
+        me.close();
+      });
     }
 
     this.dataAvailablePromise = new Promise(function (resolve) {
@@ -87,6 +107,7 @@ var PDFProductPopup = (function PDFProductPopupClosure() {
       options.spinner.classList.remove('hidden');
       options.productPopup.classList.add('hidden');
       options.errorBody.classList.add('hidden');
+      this.current_product = null;
     },
 
     /**
@@ -169,13 +190,12 @@ var PDFProductPopup = (function PDFProductPopupClosure() {
       var me = this;
       var parsedXML = $.parseXML(xml);
       var product = {};
-      var validProduct = false;
       var record = $(parsedXML).find('record');
 
       if(record.length < 1) {
         console.log("ERROR - There are 0 products in the response.");
+        me._showPopupBody(false);
       } else {
-        validProduct = true;
         record.each(function() {
           product.sku = $(this).find('sku').text();
           product.name = $(this).find('name').text();
@@ -185,15 +205,31 @@ var PDFProductPopup = (function PDFProductPopupClosure() {
           product.available = $(this).find('available').text();
           product.image = $(this).find('image').text()
         });
-      }
-
-      if (validProduct) {
+        me.current_product = product;
         for (var identifier in product) {
           me._updateUI(me.fields[identifier], product[identifier]);
         }
-        me._updateUI(me.fields["image"], product["image"], true);
+        me._setImage();
       }
-      me._showPopupBody(validProduct);
+    },
+
+    _setImage: function PDFProductPopup_setImage() {
+      var me = this;
+      var product = me.current_product;
+      var image = new Image();
+      image.src = product.image;
+      image.onload = function() {
+        var iar = this.height / this.width;
+        var imgh = Math.min(this.height, $(window).height()*.4);
+        var imgw = imgh/iar;
+        $("#productImageField").prop("src",image.src).css({width:imgw,height:imgh});
+        me._showPopupBody(true);
+      };
+
+      image.onerror = function(){
+        $('#productImageField').prop("src","images/noimage.png");
+        me._showPopupBody(true);
+      }
     },
 
     /**
@@ -215,9 +251,9 @@ var PDFProductPopup = (function PDFProductPopupClosure() {
      * Update the popup fields.
      * The only special case is when the field is an image
      */
-    _updateUI: function PDFProductPopup_updateUI(field, content, isImage) {
+    _updateUI: function PDFProductPopup_updateUI(field, content) {
       if (field && content !== undefined && content !== '') {
-        field[isImage ? "src" : "textContent"] = content;
+        field["textContent"] = content;
       }
     },
 

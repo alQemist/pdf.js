@@ -37,7 +37,8 @@ var SidebarView = {
   NONE: 0,
   THUMBS: 1,
   OUTLINE: 2,
-  ATTACHMENTS: 3
+  ATTACHMENTS: 3,
+  CART: 4
 };
 
 /**
@@ -93,6 +94,7 @@ var PDFSidebar = (function PDFSidebarClosure() {
     this.pdfViewer = options.pdfViewer;
     this.pdfThumbnailViewer = options.pdfThumbnailViewer;
     this.pdfOutlineViewer = options.pdfOutlineViewer;
+    this.pdfCartViewer = options.pdfCartViewer;
 
     this.mainContainer = options.mainContainer;
     this.outerContainer = options.outerContainer;
@@ -107,6 +109,7 @@ var PDFSidebar = (function PDFSidebarClosure() {
 
     this.thumbnailView = options.thumbnailView;
     this.outlineView = options.outlineView;
+    this.cartView = options.cartView;
     this.attachmentsView = options.attachmentsView;
 
     this.disableNotification = options.disableNotification || false;
@@ -140,6 +143,10 @@ var PDFSidebar = (function PDFSidebarClosure() {
 
     get isOutlineViewVisible() {
       return (this.isOpen && this.active === SidebarView.OUTLINE);
+    },
+
+    get isCartViewVisible() {
+      return (this.isOpen && this.active === SidebarView.CART);
     },
 
     get isAttachmentsViewVisible() {
@@ -186,6 +193,8 @@ var PDFSidebar = (function PDFSidebarClosure() {
       var isViewChanged = (view !== this.active);
       var shouldForceRendering = false;
 
+      if (!isViewChanged) return;
+
       switch (view) {
         case SidebarView.THUMBS:
           this.thumbnailButton.classList.add('toggled');
@@ -195,6 +204,7 @@ var PDFSidebar = (function PDFSidebarClosure() {
           // this.attachmentsButton.classList.remove('toggled');
 
           this.thumbnailView.classList.remove('hidden');
+          this.cartView.classList.add('hidden');
           this.outlineView.classList.add('hidden');
           // this.attachmentsView.classList.add('hidden');
 
@@ -214,6 +224,7 @@ var PDFSidebar = (function PDFSidebarClosure() {
           // this.attachmentsButton.classList.remove('toggled');
 
           this.thumbnailView.classList.add('hidden');
+          this.cartView.classList.add('hidden');
           this.outlineView.classList.remove('hidden');
           // this.attachmentsView.classList.add('hidden');
           break;
@@ -223,13 +234,28 @@ var PDFSidebar = (function PDFSidebarClosure() {
           // }
           this.thumbnailButton.classList.remove('toggled');
           this.outlineButton.classList.remove('toggled');
-          this.favoriteButton.classList.add('toggled');
+          this.favoriteButton.classList.remove('toggled');
+          this.cartButton.classList.remove('toggled');
+          // this.attachmentsButton.classList.add('toggled');
+
+          this.thumbnailView.classList.add('hidden');
+          this.outlineView.classList.add('hidden');
+          this.cartView.classList.add('hidden');
+          this.attachmentsView.classList.remove('hidden');
+          break;
+        case SidebarView.CART:
+          // if (this.attachmentsButton.disabled) {
+          //   return;
+          // }
+          this.thumbnailButton.classList.remove('toggled');
+          this.outlineButton.classList.remove('toggled');
+          this.favoriteButton.classList.remove('toggled');
           this.cartButton.classList.add('toggled');
           // this.attachmentsButton.classList.add('toggled');
 
           this.thumbnailView.classList.add('hidden');
           this.outlineView.classList.add('hidden');
-          // this.attachmentsView.classList.remove('hidden');
+          this.cartView.classList.remove('hidden');
           break;
         default:
           console.error('PDFSidebar_switchView: "' + view +
@@ -284,6 +310,29 @@ var PDFSidebar = (function PDFSidebarClosure() {
 
       this._forceRendering();
       this._dispatchEvent();
+    },
+
+    show_cart_view: function PDFSidebar_show_cart_view() {
+      var me = this;
+      if (!me.isOpen) {
+        me.open();
+      }
+      me.switchView(SidebarView.CART);
+    },
+
+    /**
+     * @private
+     */
+    _update_cart_notification: function PDFSidebar_update_cart_notification(show) {
+      var me = this;
+      if (!this.isOpen) {
+        me.toggleButton.classList.add(UI_NOTIFICATION_CLASS);
+      }
+      if (show) {
+        me.cartButton.classList.add(UI_NOTIFICATION_CLASS);
+      } else {
+        me.cartButton.classList.remove(UI_NOTIFICATION_CLASS);
+      }
     },
 
     toggle: function PDFSidebar_toggle() {
@@ -344,7 +393,7 @@ var PDFSidebar = (function PDFSidebarClosure() {
       }
 
       this.toggleButton.title = mozL10n.get('toggle_sidebar_notification.title',
-        null, 'Toggle Sidebar (document contains outline/attachments)');
+        null, 'Toggle Sidebar (document contains outline/attachments/cart)');
 
       if (!this.isOpen) {
         // Only show the notification on the `toggleButton` if the sidebar is
@@ -360,6 +409,9 @@ var PDFSidebar = (function PDFSidebarClosure() {
         case SidebarView.OUTLINE:
           this.outlineButton.classList.add(UI_NOTIFICATION_CLASS);
           break;
+        /*case SidebarView.CART:
+          this.cartButton.classList.add(UI_NOTIFICATION_CLASS);
+          break;*/
         /*case SidebarView.ATTACHMENTS:
           this.attachmentsButton.classList.add(UI_NOTIFICATION_CLASS);
           break;*/
@@ -379,6 +431,9 @@ var PDFSidebar = (function PDFSidebarClosure() {
           case SidebarView.OUTLINE:
             this.outlineButton.classList.remove(UI_NOTIFICATION_CLASS);
             break;
+          /*case SidebarView.CART:
+            this.cartButton.classList.remove(UI_NOTIFICATION_CLASS);
+            break;*/
           /*case SidebarView.ATTACHMENTS:
             this.attachmentsButton.classList.remove(UI_NOTIFICATION_CLASS);
             break;*/
@@ -434,8 +489,7 @@ var PDFSidebar = (function PDFSidebarClosure() {
       });
 
       self.cartButton.addEventListener('click', function() {
-        console.log("Cart");
-        // self.switchView(SidebarView.ATTACHMENTS);
+        self.switchView(SidebarView.CART);
       });
 
       /*self.attachmentsButton.addEventListener('click', function() {

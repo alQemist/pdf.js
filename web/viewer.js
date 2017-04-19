@@ -136,6 +136,12 @@ function getViewerConfiguration() {
       // Views
       thumbnailView: document.getElementById('thumbnailView'),
       outlineView: document.getElementById('outlineView'),
+
+      //Cart
+      cartView: document.getElementById('cartView'),
+      cartCheckout: document.getElementById('cartCheckout'),
+      cartTotal: document.getElementById('cartTotal'),
+      cartProducts: document.getElementById('cartProducts'),
       // attachmentsView: document.getElementById('attachmentsView'),
     },
     findBar: {
@@ -191,7 +197,9 @@ function getViewerConfiguration() {
         'description': document.getElementById('productDescriptionField'),
         'price': document.getElementById('productPriceField'),
         'available': document.getElementById('productAvailableField'),
-      }
+      },
+      addToCartField: document.getElementById('productAddToCartField'),
+      showCartField: document.getElementById('productShowCartField'),
     },
     publisherPopup: {
       overlayName: 'publisherPopupOverlay',
