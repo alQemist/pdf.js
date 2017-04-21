@@ -108,13 +108,13 @@ var PDFCartViewer = (function PDFCartViewerClosure() {
       var count = document.createElement('input');
       var price = document.createElement('div');
       var removeContainer = document.createElement('div');
-      var removeBtn = document.createElement('span');
+      var removeBtn = document.createElement('div');
 
       prod_container.classList.add('product_item');
       container.classList.add('item_extra');
 
       //Remove section
-      removeBtn.textContent = 'Remove';
+      removeBtn.textContent = '';
       removeBtn.addEventListener('click', function(evt) {
         me.products_SKUs.splice(idx, 1);
         delete me.products[sku_key];
@@ -122,8 +122,8 @@ var PDFCartViewer = (function PDFCartViewerClosure() {
         me._updateTotal();
       });
       removeBtn.classList.add('remove');
-      removeContainer.classList.add('remove_cnt');
-      removeContainer.appendChild(removeBtn);
+      //removeContainer.classList.add('remove_cnt');
+      //removeContainer.appendChild(removeBtn);
 
       //SKU section
       sku.textContent = product.sku;
@@ -137,12 +137,12 @@ var PDFCartViewer = (function PDFCartViewerClosure() {
       count.value = product.count;
       count.type = 'number';
       count.classList.add('count');
-      count.setAttribute('min', 0);
+      count.setAttribute('min', 1);
       count.addEventListener('input', function(evt) {
         var input = evt.target.value;
         if (!input) {
-          product.count = 0;
-          evt.target.value = 0;
+          product.count = 1;
+          evt.target.value = 1;
         } else {
           product.count = evt.target.value;
         }
@@ -155,7 +155,7 @@ var PDFCartViewer = (function PDFCartViewerClosure() {
 
       container.appendChild(count);
       container.appendChild(price);
-      container.appendChild(removeContainer);
+      container.appendChild(removeBtn);
 
       prod_container.appendChild(sku);
       prod_container.appendChild(img);
@@ -176,7 +176,7 @@ var PDFCartViewer = (function PDFCartViewerClosure() {
           me.products[sku_code].count = me.products[sku_code].count + 1;
         } else {
           me.products[sku_code] = new_product;
-          me.products[sku_code].count = 0;
+          me.products[sku_code].count = 1;
           me.products_SKUs.push(sku_code);
         }
       }

@@ -103,6 +103,7 @@
         return;
       }
       PDFViewerApplication.pdfCartViewer.addProduct(product);
+      PDFViewerApplication.pdfSidebar.show_cart_view();
     });
 
     eventBus.on('showcart', function (e) {
