@@ -87,6 +87,7 @@ var PDFCartViewer = (function PDFCartViewerClosure() {
       var me = this;
       var options = me.options;
       var products = me.products;
+      var description = me.description;
       var total = 0;
       var price, count;
 
@@ -95,7 +96,7 @@ var PDFCartViewer = (function PDFCartViewerClosure() {
         price = parseFloat(product.price);
         total += price * count;
       });
-      options.cartTotal.textContent = total.toFixed(2);
+      options.cartTotal.textContent = "$ "+total.toFixed(2);
     },
 
     _createProductItem: function PDFCartViewer_createProductItem(sku_key, idx) {
@@ -122,6 +123,7 @@ var PDFCartViewer = (function PDFCartViewerClosure() {
         me._updateTotal();
       });
       removeBtn.classList.add('remove');
+
       //removeContainer.classList.add('remove_cnt');
       //removeContainer.appendChild(removeBtn);
 
@@ -151,6 +153,7 @@ var PDFCartViewer = (function PDFCartViewerClosure() {
 
       //Image section
       img.src = product.image;
+      img.title=product.description;
       img.classList.add('image');
 
       container.appendChild(count);

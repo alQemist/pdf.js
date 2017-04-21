@@ -1642,11 +1642,11 @@ function extraUIConfig() {
     appConfig.toolbar.download.classList.add('hidden');
   }
 
-  if (!matadataConfig["allow_favorite"]) {
+  if (matadataConfig["allow_favorite"]!=1) {
     appConfig.sidebar.favoriteButton.classList.add('hidden');
   }
 
-  if (!matadataConfig["allow_fullscreen"]) {
+  if (matadataConfig["allow_fullscreen"]!= 1) {
     appConfig.toolbar.presentationModeButton.classList.add('hidden');
   }
 
@@ -1654,7 +1654,7 @@ function extraUIConfig() {
     appConfig.secondaryToolbar.shareButton.classList.add('hidden');
   }
 
-  if (!matadataConfig["productLookup"]) {
+  if (!matadataConfig["product_query_url"]) {
     appConfig.sidebar.cartButton.classList.add('hidden');
   }
 
