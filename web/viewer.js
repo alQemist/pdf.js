@@ -17,8 +17,7 @@
 'use strict';
 
 var DEFAULT_URL = 'Spring.pdf';
-// var DEFAULT_URL = 'compressed.tracemonkey-pldi-09.pdf';
-//var DEFAULT_URL = 'test.pdf';
+// var DEFAULT_URL = 'test.pdf';
 
 if (typeof PDFJSDev !== 'undefined' && PDFJSDev.test('CHROME')) {
   (function rewriteUrlClosure() {
@@ -238,13 +237,13 @@ function getViewerConfiguration() {
       title: '',
       default_color: '',
       page_offset: '0',
-      allow_download: '1',
-      allow_print: '1',
-      allow_share: '1',
-      allow_favorite: '1',
+      allow_download: '0',
+      allow_print: '0',
+      allow_share: '0',
+      allow_favorite: '0',
       page_mode: '',
       page_zoom: 0,
-      allow_fullscreen: 0,
+      allow_fullscreen: '0',
 
       // Publisher Info
       company: '',

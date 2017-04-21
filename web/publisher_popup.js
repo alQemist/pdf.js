@@ -12,127 +12,137 @@
   }
 }(this, function (exports, uiUtils, overlayManager) {
 
-var getPDFFileNameFromURL = uiUtils.getPDFFileNameFromURL;
-var mozL10n = uiUtils.mozL10n;
-var OverlayManager = overlayManager.OverlayManager;
+  var getPDFFileNameFromURL = uiUtils.getPDFFileNameFromURL;
+  var mozL10n = uiUtils.mozL10n;
+  var OverlayManager = overlayManager.OverlayManager;
 
-/**
- * @typedef {Object} PDFPublisherPopupOptions
- * @property {string} overlayName - Name/identifier for the overlay.
- * @property {Object} fields - Names and elements of the overlay's fields.
- * @property {HTMLButtonElement} closeButton - Button for closing the overlay.
- */
-
-/**
- * @class
- */
-var PDFPublisherPopup = (function PDFPublisherPopupClosure() {
   /**
-   * @constructs PDFPublisherPopup
-   * @param {PDFPublisherPopupOptions} options
+   * @typedef {Object} PDFPublisherPopupOptions
+   * @property {string} overlayName - Name/identifier for the overlay.
+   * @property {Object} fields - Names and elements of the overlay's fields.
+   * @property {HTMLButtonElement} closeButton - Button for closing the overlay.
    */
-  function PDFPublisherPopup(options) {
-    this.fields = options.fields;
-    this.overlayName = options.overlayName;
-    this.container = options.container;
 
-    this.url = null;
-    this.pdfDocument = null;
-
-    // Bind the event listener for the Close button.
-    if (options.closeButton) {
-      options.closeButton.addEventListener('click', this.close.bind(this));
-    }
-
-    this.dataAvailablePromise = new Promise(function (resolve) {
-      this.resolveDataAvailable = resolve;
-    }.bind(this));
-
-    OverlayManager.register(this.overlayName, this.container,
-                            this.close.bind(this));
-  }
-
-  PDFPublisherPopup.prototype = {
+  /**
+   * @class
+   */
+  var PDFPublisherPopup = (function PDFPublisherPopupClosure() {
     /**
-     * Open the document properties overlay.
+     * @constructs PDFPublisherPopup
+     * @param {PDFPublisherPopupOptions} options
      */
-    open: function PDFPublisherPopup_open() {
-      Promise.all([OverlayManager.open(this.overlayName),
-                   this.dataAvailablePromise]).then(function () {
-        this._getProperties();
-      }.bind(this));
-    },
+    function PDFPublisherPopup(options) {
+      this.fields = options.fields;
+      this.overlayName = options.overlayName;
+      this.container = options.container;
+      this.isOpen = false;
 
-    /**
-     * Close the document properties overlay.
-     */
-    close: function PDFPublisherPopup_close() {
-      OverlayManager.close(this.overlayName);
-    },
+      this.url = null;
+      this.pdfDocument = null;
 
-    /**
-     * Set a reference to the PDF document and the URL in order
-     * to populate the overlay fields with the document properties.
-     * Note that the overlay will contain no information if this method
-     * is not called.
-     *
-     * @param {Object} pdfDocument - A reference to the PDF document.
-     * @param {string} url - The URL of the document.
-     */
-    setDocumentAndUrl:
-        function PDFPublisherPopup_setDocumentAndUrl(pdfDocument, url) {
-      this.pdfDocument = pdfDocument;
-      this.url = url;
-      this.resolveDataAvailable();
-    },
-
-    /**
-     * @private
-     */
-    _getProperties: function PDFPublisherPopup_getProperties() {
-      if (!OverlayManager.active) {
-        // If the dialog was closed before dataAvailablePromise was resolved,
-        // don't bother updating the properties.
-        return;
+      // Bind the event listener for the Close button.
+      if (options.closeButton) {
+        options.closeButton.addEventListener('click', this.close.bind(this));
       }
 
-      var appConfig = PDFViewerApplication.appConfig;
-      var matadataConfig = appConfig.matadataConfig;
+      this.dataAvailablePromise = new Promise(function (resolve) {
+        this.resolveDataAvailable = resolve;
+      }.bind(this));
 
-      // Get the document properties.
-      this.pdfDocument.getMetadata().then(function(data) {
-        var content = {
-          'company': matadataConfig['company'],
-          'address1': matadataConfig['address1'],
-          'address2': matadataConfig['address2'],
-          'city': matadataConfig['city'],
-          'state': matadataConfig['state'],
-          'zip': matadataConfig['zip'],
-          'country': matadataConfig['country'],
-          'company_email': matadataConfig['company_email'],
-          'phone': matadataConfig['phone'],
-          'weburl': matadataConfig['weburl'],
-        };
+      OverlayManager.register(this.overlayName, this.container,
+        this.close.bind(this));
+    }
 
-        // Show the properties in the dialog.
-        for (var identifier in content) {
-          this._updateUI(this.fields[identifier], content[identifier]);
+    PDFPublisherPopup.prototype = {
+      /**
+       * Open the document properties overlay.
+       */
+      open: function PDFPublisherPopup_open() {
+        Promise.all([OverlayManager.open(this.overlayName),
+          this.dataAvailablePromise]).then(function () {
+          this._getProperties();
+          this.isOpen = true;
+        }.bind(this));
+      },
+
+      /**
+       * Close the document properties overlay.
+       */
+      close: function PDFPublisherPopup_close() {
+        OverlayManager.close(this.overlayName);
+        this.isOpen = false;
+      },
+
+      /**
+       * Private
+       */
+      _isPopupOpen: function PDFProductPopup_isOpen() {
+        var me = this;
+        return me.isOpen;
+      },
+
+      /**
+       * Set a reference to the PDF document and the URL in order
+       * to populate the overlay fields with the document properties.
+       * Note that the overlay will contain no information if this method
+       * is not called.
+       *
+       * @param {Object} pdfDocument - A reference to the PDF document.
+       * @param {string} url - The URL of the document.
+       */
+      setDocumentAndUrl: function PDFPublisherPopup_setDocumentAndUrl(pdfDocument, url) {
+        this.pdfDocument = pdfDocument;
+        this.url = url;
+        this.resolveDataAvailable();
+      },
+
+      /**
+       * @private
+       */
+      _getProperties: function PDFPublisherPopup_getProperties() {
+        if (!OverlayManager.active) {
+          // If the dialog was closed before dataAvailablePromise was resolved,
+          // don't bother updating the properties.
+          return;
         }
-      }.bind(this));
-    },
 
-    /**
-     * @private
-     */
-    _updateUI: function PDFPublisherPopup_updateUI(field, content) {
-      if (field && content !== undefined && content !== '') {
-        field.textContent = content;
+        var appConfig = PDFViewerApplication.appConfig;
+        var matadataConfig = appConfig.matadataConfig;
+
+        // Get the document properties.
+        this.pdfDocument.getMetadata().then(function (data) {
+          var content = {
+            'company': matadataConfig['company'],
+            'address1': matadataConfig['address1'],
+            'address2': matadataConfig['address2'],
+            'city': matadataConfig['city'],
+            'state': matadataConfig['state'],
+            'zip': matadataConfig['zip'],
+            'country': matadataConfig['country'],
+            'company_email': matadataConfig['company_email'],
+            'phone': matadataConfig['phone'],
+            'weburl': matadataConfig['weburl'],
+          };
+
+          // Show the properties in the dialog.
+          for (var identifier in content) {
+            this._updateUI(this.fields[identifier], content[identifier]);
+          }
+        }.bind(this));
+      },
+
+      /**
+       * @private
+       */
+      _updateUI: function PDFPublisherPopup_updateUI(field, content) {
+        if (field && content !== undefined && content !== '') {
+          field.textContent = content;
+        }
       }
-    }
-  };
+    };
 
-  return PDFPublisherPopup;
-})();
+    return PDFPublisherPopup;
+  })();
 
-exports.PDFPublisherPopup = PDFPublisherPopup;
+  exports.PDFPublisherPopup = PDFPublisherPopup;
 }));
