@@ -1940,6 +1940,14 @@
     };
   }
 
+<<<<<<< HEAD
+  if (matadataConfig["allow_favorite"]!=1) {
+    appConfig.sidebar.favoriteButton.classList.add('hidden');
+  }
+
+  if (matadataConfig["allow_fullscreen"]!= 1) {
+    appConfig.toolbar.presentationModeButton.classList.add('hidden');
+=======
   function webViewerPresentationMode() {
     PDFViewerApplication.requestPresentationMode();
   }
@@ -1947,14 +1955,20 @@
   function webViewerOpenFile() {
     var openFileInputName = PDFViewerApplication.appConfig.openFileInputName;
     document.getElementById(openFileInputName).click();
+>>>>>>> origin/master
   }
 
   function webViewerPrint() {
     window.print();
   }
 
+<<<<<<< HEAD
+  if (!matadataConfig["product_query_url"]) {
+    appConfig.sidebar.cartButton.classList.add('hidden');
+=======
   function webViewerDownload() {
     PDFViewerApplication.download();
+>>>>>>> origin/master
   }
 
   function webViewerFirstPage() {

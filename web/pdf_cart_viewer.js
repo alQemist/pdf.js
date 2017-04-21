@@ -59,6 +59,86 @@
       this.eventBus = options.eventBus;
     }
 
+<<<<<<< HEAD
+    /**
+     * @private
+     */
+    _showCheckout: function PDFCartViewer_showCheckout() {
+      var me = this;
+      var sidebar = PDFViewerApplication.pdfSidebar;
+      var options = me.options;
+      if ($.isEmptyObject(me.products)) {
+        sidebar._update_cart_notification(false);
+        //options.cartCheckout.classList.add('hidden');
+      } else {
+        sidebar._update_cart_notification(true);
+        //options.cartCheckout.classList.remove('hidden');
+      }
+    },
+
+    _updateTotal: function PDFCartViewer_updateTotal() {
+      var me = this;
+      var options = me.options;
+      var products = me.products;
+      var description = me.description;
+      var total = 0;
+      var price, count;
+
+      $.each(products, function(key, product) {
+        count = parseInt(product.count, 10);
+        price = parseFloat(product.price);
+        total += price * count;
+      });
+      options.cartTotal.textContent = "$ "+total.toFixed(2);
+    },
+
+    _createProductItem: function PDFCartViewer_createProductItem(sku_key, idx) {
+      var me = this;
+      var product = me.products[sku_key];
+      var prod_container = document.createElement('div');
+      var container = document.createElement('div');
+      var sku = document.createElement('div');
+      var img = document.createElement('img');
+      var count = document.createElement('input');
+      var price = document.createElement('div');
+      var removeContainer = document.createElement('div');
+      var removeBtn = document.createElement('div');
+
+      prod_container.classList.add('product_item');
+      container.classList.add('item_extra');
+
+      //Remove section
+      removeBtn.textContent = '';
+      removeBtn.addEventListener('click', function(evt) {
+        me.products_SKUs.splice(idx, 1);
+        delete me.products[sku_key];
+        me.addProduct();
+        me._updateTotal();
+      });
+      removeBtn.classList.add('remove');
+
+      //removeContainer.classList.add('remove_cnt');
+      //removeContainer.appendChild(removeBtn);
+
+      //SKU section
+      sku.textContent = product.sku;
+      sku.classList.add('title');
+
+      //Price section
+      price.textContent = "$ " + product.price;
+      price.classList.add('price');
+
+      //Count section
+      count.value = product.count;
+      count.type = 'number';
+      count.classList.add('count');
+      count.setAttribute('min', 1);
+      count.addEventListener('input', function(evt) {
+        var input = evt.target.value;
+        if (!input) {
+          product.count = 1;
+          evt.target.value = 1;
+=======
     PDFCartViewer.prototype = {
       reset: function PDFCartViewer_reset() {
         this.cart = null;
@@ -78,10 +158,46 @@
         if ($.isEmptyObject(me.products)) {
           sidebar._update_cart_notification(false);
           //options.cartCheckout.classList.add('hidden');
+>>>>>>> origin/master
         } else {
           sidebar._update_cart_notification(true);
           //options.cartCheckout.classList.remove('hidden');
         }
+<<<<<<< HEAD
+        me._updateTotal();
+      });
+
+      //Image section
+      img.src = product.image;
+      img.title=product.description;
+      img.classList.add('image');
+
+      container.appendChild(count);
+      container.appendChild(price);
+      container.appendChild(removeBtn);
+
+      prod_container.appendChild(sku);
+      prod_container.appendChild(img);
+      prod_container.appendChild(container);
+      prod_container.appendChild(document.createElement('hr'));
+      return prod_container;
+    },
+
+    addProduct: function PDFCartViewer_addProduct(new_product) {
+      var me = this;
+      var sku_code, i;
+      var cartProducts = me.options.cartProducts;
+
+      cartProducts.textContent = '';
+      if (new_product) {
+        sku_code = new_product.sku;
+        if(me.products[sku_code]) {
+          me.products[sku_code].count = me.products[sku_code].count + 1;
+        } else {
+          me.products[sku_code] = new_product;
+          me.products[sku_code].count = 1;
+          me.products_SKUs.push(sku_code);
+=======
       },
 
       _updateTotal: function PDFCartViewer_updateTotal() {
@@ -180,6 +296,7 @@
             me.products[sku_code].count = 1;
             me.products_SKUs.push(sku_code);
           }
+>>>>>>> origin/master
         }
 
         me._showCheckout();
