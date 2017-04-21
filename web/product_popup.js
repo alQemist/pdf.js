@@ -27,255 +27,266 @@
   }
 }(this, function (exports, uiUtils, overlayManager) {
 
-var mozL10n = uiUtils.mozL10n;
-var OverlayManager = overlayManager.OverlayManager;
+  var mozL10n = uiUtils.mozL10n;
+  var OverlayManager = overlayManager.OverlayManager;
 
-/**
- * @typedef {Object} PDFProductPopup
- * @property {string} overlayName - Name/identifier for the overlay.
- * @property {Object} fields - Names and elements of the overlay's fields.
- * @property {HTMLButtonElement} closeButton - Button for closing the overlay.
- */
-
-/**
- * @class
- */
-var PDFProductPopup = (function PDFProductPopupClosure() {
   /**
-   * @constructs PDFProductPopup
-   * @param {PDFProductPopupOptions} options
+   * @typedef {Object} PDFProductPopup
+   * @property {string} overlayName - Name/identifier for the overlay.
+   * @property {Object} fields - Names and elements of the overlay's fields.
+   * @property {HTMLButtonElement} closeButton - Button for closing the overlay.
    */
-  function PDFProductPopup(options, eventBus) {
-    var me = this;
-    this.eventBus = eventBus;
-    this.options = options;
-    this.fields = options.fields;
-    this.overlayName = options.overlayName;
-    this.container = options.container;
 
-    // Bind the event listener for the Close button.
-    if (options.closeButton) {
-      options.closeButton.addEventListener('click', this.close.bind(this));
-    }
-    if (options.popupErrorClose) {
-      options.popupErrorClose.addEventListener('click', this.close.bind(this));
-    }
-    if (options.addToCartField) {
-      options.addToCartField.addEventListener('click', function () {
-        if (!me.current_product) {
-          return;
-        }
-        me.eventBus.dispatch('addtocart', {
-          product: me.current_product
-        });
-      });
-    }
-    if (options.showCartField) {
-      options.showCartField.addEventListener('click', function () {
-        me.eventBus.dispatch('showcart');
-        me.close();
-      });
-    }
-
-    this.dataAvailablePromise = new Promise(function (resolve) {
-      this.resolveDataAvailable = resolve;
-    }.bind(this));
-
-    OverlayManager.register(this.overlayName, this.container, this.close.bind(this));
-  }
-
-  PDFProductPopup.prototype = {
+  /**
+   * @class
+   */
+  var PDFProductPopup = (function PDFProductPopupClosure() {
     /**
-     * Open the document properties overlay.
+     * @constructs PDFProductPopup
+     * @param {PDFProductPopupOptions} options
      */
-    open: function PDFProductPopup_open(sku, product_query_url) {
-      if (OverlayManager.active) {
-        this.close();
+    function PDFProductPopup(options, eventBus) {
+      var me = this;
+      this.eventBus = eventBus;
+      this.options = options;
+      this.fields = options.fields;
+      this.overlayName = options.overlayName;
+      this.container = options.container;
+      this.isOpen = false;
+
+      // Bind the event listener for the Close button.
+      if (options.closeButton) {
+        options.closeButton.addEventListener('click', this.close.bind(this));
       }
-      Promise.all([OverlayManager.open(this.overlayName),
-        this.dataAvailablePromise]).then(function () {
-        this._fetchProduct(sku, product_query_url);
+      if (options.popupErrorClose) {
+        options.popupErrorClose.addEventListener('click', this.close.bind(this));
+      }
+      if (options.addToCartField) {
+        options.addToCartField.addEventListener('click', function () {
+          if (!me.current_product) {
+            return;
+          }
+          me.eventBus.dispatch('showcart');
+          me.eventBus.dispatch('addtocart', {
+            product: me.current_product
+          });
+        });
+      }
+      if (options.showCartField) {
+        options.showCartField.addEventListener('click', function () {
+          me.eventBus.dispatch('showcart');
+          me.close();
+        });
+      }
+
+      this.dataAvailablePromise = new Promise(function (resolve) {
+        this.resolveDataAvailable = resolve;
       }.bind(this));
-    },
 
-    /**
-     * Close the document properties overlay.
-     */
-    close: function PDFProductPopup_close() {
-      var options = this.options;
-      OverlayManager.close(this.overlayName);
-      options.spinner.classList.remove('hidden');
-      options.productPopup.classList.add('hidden');
-      options.errorBody.classList.add('hidden');
-      this.current_product = null;
-    },
+      OverlayManager.register(this.overlayName, this.container, this.close.bind(this));
+    }
 
-    /**
-     * Set a reference to the PDF document and the URL in order
-     * to populate the overlay fields with the document properties.
-     * Note that the overlay will contain no information if this method
-     * is not called.
-     *
-     * @param {Object} pdfDocument - A reference to the PDF document.
-     * @param {string} url - The URL of the document.
-     */
-    setDocumentAndUrl:
-      function PDFProductPopup_setDocumentAndUrl(pdfDocument, url) {
+    PDFProductPopup.prototype = {
+      /**
+       * Open the document properties overlay.
+       */
+      open: function PDFProductPopup_open(sku, product_query_url) {
+        if (OverlayManager.active) {
+          this.close();
+        }
+        Promise.all([OverlayManager.open(this.overlayName),
+          this.dataAvailablePromise]).then(function () {
+          this._fetchProduct(sku, product_query_url);
+        }.bind(this));
+      },
+
+      /**
+       * Private
+       */
+      _isPopupOpen: function PDFProductPopup_isOpen() {
+        var me = this;
+        return me.isOpen;
+      },
+
+      /**
+       * Close the document properties overlay.
+       */
+      close: function PDFProductPopup_close() {
+        var options = this.options;
+        OverlayManager.close(this.overlayName);
+        options.spinner.classList.remove('hidden');
+        options.productPopup.classList.add('hidden');
+        options.errorBody.classList.add('hidden');
+        this.current_product = null;
+        this.isOpen = false;
+      },
+
+      /**
+       * Set a reference to the PDF document and the URL in order
+       * to populate the overlay fields with the document properties.
+       * Note that the overlay will contain no information if this method
+       * is not called.
+       *
+       * @param {Object} pdfDocument - A reference to the PDF document.
+       * @param {string} url - The URL of the document.
+       */
+      setDocumentAndUrl: function PDFProductPopup_setDocumentAndUrl(pdfDocument, url) {
         this.pdfDocument = pdfDocument;
         this.url = url;
         this.resolveDataAvailable();
       },
 
-    /**
-     * Make a request to get extra information about a product in order
-     * to show a popup with information.
-     * @param sku {String} - A number referring to the product ID unique code
-     * @param product_query_url {String} - The url from where the information should be fetch
-     */
-    _fetchProduct: function PDFProductPopup_fetchProduct(sku, product_query_url) {
-      var me = this;
-      var productURL = product_query_url;
-      var re = new RegExp(/\[SKU\]/g);
-      var xmlhttp = new XMLHttpRequest();
+      /**
+       * Make a request to get extra information about a product in order
+       * to show a popup with information.
+       * @param sku {String} - A number referring to the product ID unique code
+       * @param product_query_url {String} - The url from where the information should be fetch
+       */
+      _fetchProduct: function PDFProductPopup_fetchProduct(sku, product_query_url) {
+        var me = this;
+        var productURL = product_query_url;
+        var re = new RegExp(/\[SKU\]/g);
+        var xmlhttp = new XMLHttpRequest();
 
-      productURL = productURL.replace(re, sku);
-      xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState == XMLHttpRequest.DONE ) {
-          me._trace(xmlhttp);
-          if (xmlhttp.status == 200) {
-            me._parseProduct(xmlhttp.responseText);
-          } else {
-            me._showPopupBody(false);
+        productURL = productURL.replace(re, sku);
+        xmlhttp.onreadystatechange = function () {
+          if (xmlhttp.readyState == XMLHttpRequest.DONE) {
+            me._trace(xmlhttp);
+            if (xmlhttp.status == 200) {
+              me._parseProduct(xmlhttp.responseText);
+            } else {
+              me._showPopupBody(false);
+            }
           }
-        }
-      };
+        };
 
-      xmlhttp.open("GET", productURL, true);
-      xmlhttp.setRequestHeader('Content-Type', 'text/xml');
-      xmlhttp.send();
-    },
+        xmlhttp.open("GET", productURL, true);
+        xmlhttp.setRequestHeader('Content-Type', 'text/xml');
+        xmlhttp.send();
+      },
 
-    // Production ready fetch
-    /*_fetchProduct: function PDFProductPopup_fetchProduct(sku, product_query_url) {
-      var me = this;
-      var re = new RegExp(/\[SKU\]/g);
-      var U = product_query_url;
-      var host = (config.domain).split('.');
-      host = host[1] + '.' + host[2];
+      // Production ready fetch
+      /*_fetchProduct: function PDFProductPopup_fetchProduct(sku, product_query_url) {
+       var me = this;
+       var re = new RegExp(/\[SKU\]/g);
+       var U = product_query_url;
+       var host = (config.domain).split('.');
+       host = host[1] + '.' + host[2];
 
-      // in the case of being hosted on a subdomain  the url will be modified to match the domain...
-      if (U.indexOf('[host]') > -1) {
-        U = U.replace("[host]", host)
-      }
-      // replace the placeholder in the string with the actual SKU value
-      U = U.replace(re, txt);
+       // in the case of being hosted on a subdomain  the url will be modified to match the domain...
+       if (U.indexOf('[host]') > -1) {
+       U = U.replace("[host]", host)
+       }
+       // replace the placeholder in the string with the actual SKU value
+       U = U.replace(re, txt);
 
-      // request is made through a proxy to avoid issues with cross-domain request...
-      var productURL = "/proxyRequest.php?url=" + encodeURIComponent(U);
+       // request is made through a proxy to avoid issues with cross-domain request...
+       var productURL = "/proxyRequest.php?url=" + encodeURIComponent(U);
 
-      $.ajax({
-        type: 'GET',
-        url: productURL,
-        cache: false,
-        crossDomain: false,
-        dataType: 'xml',
-        success: me._parseProduct,
-        error: function (XMLHttpRequest, textStatus, errorThrown) {
+       $.ajax({
+       type: 'GET',
+       url: productURL,
+       cache: false,
+       crossDomain: false,
+       dataType: 'xml',
+       success: me._parseProduct,
+       error: function (XMLHttpRequest, textStatus, errorThrown) {
+       me._showPopupBody(false);
+       }
+       });
+       },*/
+
+      _parseProduct: function PDFProductPopup_parseProduct(xml) {
+        var me = this;
+        var parsedXML = $.parseXML(xml);
+        var product = {};
+        var record = $(parsedXML).find('record');
+
+        if (record.length < 1) {
+          console.log("ERROR - There are 0 products in the response.");
           me._showPopupBody(false);
+        } else {
+          record.each(function () {
+            product.sku = $(this).find('sku').text();
+            product.name = $(this).find('name').text();
+            product.description = $(this).find('description').first().text();
+            product.weight = $(this).find('weight').text();
+            product.price = ($(this).find('price').text() - 0).toFixed(2);
+            product.available = $(this).find('available').text();
+            product.image = $(this).find('image').text()
+          });
+          me.current_product = product;
+          for (var identifier in product) {
+            me._updateUI(me.fields[identifier], product[identifier]);
+          }
+          me._setImage();
         }
-      });
-    },*/
+      },
 
-    _parseProduct: function PDFProductPopup_parseProduct(xml) {
-      var me = this;
-      var parsedXML = $.parseXML(xml);
-      var product = {};
-      var record = $(parsedXML).find('record');
+      _setImage: function PDFProductPopup_setImage() {
+        var me = this;
+        var product = me.current_product;
+        var image = new Image();
+        image.src = product.image;
+        image.onload = function () {
+          var iar = this.height / this.width;
+          var imgh = Math.min(this.height, $(window).height() * .4);
+          var imgw = imgh / iar;
+          $("#productImageField").prop("src", image.src).css({width: imgw, height: imgh});
+          me._showPopupBody(true);
+        };
 
-      if(record.length < 1) {
-        console.log("ERROR - There are 0 products in the response.");
-        me._showPopupBody(false);
-      } else {
-        record.each(function() {
-          product.sku = $(this).find('sku').text();
-          product.name = $(this).find('name').text();
-          product.description = $(this).find('description').first().text();
-          product.weight = $(this).find('weight').text();
-          product.price = ($(this).find('price').text()-0).toFixed(2);
-          product.available = $(this).find('available').text();
-          product.image = $(this).find('image').text()
-        });
-        me.current_product = product;
-        for (var identifier in product) {
-          me._updateUI(me.fields[identifier], product[identifier]);
+        image.onerror = function () {
+          $('#productImageField').prop("src", "images/noimage.png");
+          me._showPopupBody(true);
         }
-        me._setImage();
+      },
+
+      /**
+       * @private
+       * Use to show the product popup or an error message
+       */
+      _showPopupBody: function PDFProductPopup_showPopupBody(show) {
+        var me = this;
+        var options = me.options;
+        var actions = ['add', 'remove'];
+
+        options.spinner.classList.add('hidden');
+        options.productPopup.classList[actions[show + 0]]('hidden');
+        options.errorBody.classList[actions[!show + 0]]('hidden');
+        this.isOpen = true;
+      },
+
+      /**
+       * @private
+       * Update the popup fields.
+       * The only special case is when the field is an image
+       */
+      _updateUI: function PDFProductPopup_updateUI(field, content) {
+        if (field && content !== undefined && content !== '') {
+          field["textContent"] = content;
+        }
+      },
+
+      /**
+       * @private
+       * View request logs
+       */
+      _trace: function PDFProductPopup_trace(xmlhttp) {
+        var appConfig = PDFViewerApplication.appConfig;
+        if (!appConfig.DEBUG_MODE) {
+          return;
+        }
+        console.log("%c-------- Trace Log -------", "font-weight: bolder");
+        console.log("Request URL -> " + xmlhttp.responseURL);
+        console.log("Request status -> " + xmlhttp.status);
+        console.log("Request status text -> " + xmlhttp.statusText);
+        console.log("Request response text -> \n" + xmlhttp.response);
       }
-    },
+    };
 
-    _setImage: function PDFProductPopup_setImage() {
-      var me = this;
-      var product = me.current_product;
-      var image = new Image();
-      image.src = product.image;
-      image.onload = function() {
-        var iar = this.height / this.width;
-        var imgh = Math.min(this.height, $(window).height()*.4);
-        var imgw = imgh/iar;
-        $("#productImageField").prop("src",image.src).css({width:imgw,height:imgh});
-        me._showPopupBody(true);
-      };
+    return PDFProductPopup;
+  })();
 
-      image.onerror = function(){
-        $('#productImageField').prop("src","images/noimage.png");
-        me._showPopupBody(true);
-      }
-    },
-
-    /**
-     * @private
-     * Use to show the product popup or an error message
-     */
-    _showPopupBody: function PDFProductPopup_showPopupBody(show) {
-      var me = this;
-      var options = me.options;
-      var actions = ['add', 'remove'];
-
-      options.spinner.classList.add('hidden');
-      options.productPopup.classList[actions[show + 0]]('hidden');
-      options.errorBody.classList[actions[!show + 0]]('hidden');
-    },
-
-    /**
-     * @private
-     * Update the popup fields.
-     * The only special case is when the field is an image
-     */
-    _updateUI: function PDFProductPopup_updateUI(field, content) {
-      if (field && content !== undefined && content !== '') {
-        field["textContent"] = content;
-      }
-    },
-
-    /**
-     * @private
-     * View request logs
-     */
-    _trace: function PDFProductPopup_trace(xmlhttp) {
-      var appConfig = PDFViewerApplication.appConfig;
-      if (!appConfig.DEBUG_MODE) {
-        return;
-      }
-      console.log("%c-------- Trace Log -------", "font-weight: bolder");
-      console.log("Request URL -> " + xmlhttp.responseURL);
-      console.log("Request status -> " + xmlhttp.status);
-      console.log("Request status text -> " + xmlhttp.statusText);
-      console.log("Request response text -> \n" + xmlhttp.response);
-    }
-  };
-
-  return PDFProductPopup;
-})();
-
-exports.PDFProductPopup = PDFProductPopup;
+  exports.PDFProductPopup = PDFProductPopup;
 }));
