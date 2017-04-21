@@ -1797,27 +1797,27 @@ html[dir='rtl'] #documentPropertiesOverlay .row > * {
   padding: 20px;
   line-height: 30px;
 }
-
 .product_checkout {
   text-align: center;
   margin: 10px 0px 20px 0px;
-  border-bottom: 2px solid gray;
+  border-bottom: 5px solid gray;
+  border-bottom-style: double;
 }
 
-.checkout_btn {
+.remove_btn {
   cursor: pointer;
   color: #C5C5C5;
   background: #1a1a1a;
-  font-size: 12px;
-  padding: 4px;
+  font-size: 17px;
+  padding: 9px;
   width: 80%;
   margin: auto;
-  border: 0px outset #3c3b3b;
+  border: 2px outset #3c3b3b;
 }
 
 .total_checkout {
   color: #C5C5C5;
-  font-size: 12px;
+  font-size: 20px;
   font-weight: 600;
   margin: 5px 0px;
 }
@@ -1828,7 +1828,7 @@ html[dir='rtl'] #documentPropertiesOverlay .row > * {
 
 .product_item .image {
   display: block;
-  max-width: 90%;
+  max-width: 100%;
   max-height: 250px;
   width: auto;
   height: auto;
@@ -1837,14 +1837,13 @@ html[dir='rtl'] #documentPropertiesOverlay .row > * {
 }
 
 .product_item .remove {
-  padding: 0px;
-  background-image: url('images/trash.png');
-  background-size: contain;
-  background-repeat: no-repeat;
-  margin: 0px;
+  padding: 3px;
+  background: #ff5252;
+  border-radius: 5px;
+  margin: 10px;
+  font-size: 12px;
   cursor: pointer;
-  width:20px;
-  height:20px;
+  color: #151010;
 }
 
 .product_item .remove:hover {
@@ -1858,7 +1857,7 @@ html[dir='rtl'] #documentPropertiesOverlay .row > * {
 
 .product_item .title {
   text-align: center;
-  font-size: 12px;
+  font-size: 20px;
   font-weight: bold;
   color: #C5C5C5;
   margin-bottom: 8px;
@@ -1868,31 +1867,36 @@ html[dir='rtl'] #documentPropertiesOverlay .row > * {
   margin-top: 15px;
 }
 
+.checkout_btn {
+  cursor: pointer;
+  color: #C5C5C5;
+  background: #1a1a1a;
+  font-size: 17px;
+  padding: 6px;
+  width: 80%;
+  margin: auto;
+  border: 0px outset #3c3b3b;
+}
+
 .product_item .count {
   width: 25%;
   text-align: center;
   background: #CCCCCC;
-  margin-left: 15px;
+  margin-left: 4px;
   z-index: 10;
-  float:left;
 }
 
 .product_item .price {
   text-align: right;
   color: #C5C5C5;
-  font-size: 12px;
+  font-size: 19px;
   float: right;
-  margin:5px;
-}
-.product_item .remove {
-  float: left;
-  margin-left:5px;
 }
 
 .product_item hr {
-  height: 2px;
+  height: 5px;
   background: #151414;
-  margin: 40px 0px;
+  margin: 10px 0px;
   border: black;
   border-radius: 5px;
 }

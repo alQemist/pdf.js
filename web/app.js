@@ -471,6 +471,7 @@
           cartTotal: appConfig.sidebar.cartTotal,
           cartProducts: appConfig.sidebar.cartProducts,
           cartCheckout: appConfig.sidebar.cartCheckout,
+          cartCheckoutBtn: appConfig.sidebar.cartCheckoutBtn,
           eventBus: eventBus,
           linkService: pdfLinkService,
         });
@@ -1660,7 +1661,7 @@
       appConfig.secondaryToolbar.shareButton.classList.remove('hidden');
     }
 
-    if (valid_metadata("productLookup")) {
+    if (valid_metadata("productLookup") || valid_metadata("product_query_url")) {
       appConfig.sidebar.cartButton.classList.remove('hidden');
     }
 
@@ -1940,14 +1941,6 @@
     };
   }
 
-<<<<<<< HEAD
-  if (matadataConfig["allow_favorite"]!=1) {
-    appConfig.sidebar.favoriteButton.classList.add('hidden');
-  }
-
-  if (matadataConfig["allow_fullscreen"]!= 1) {
-    appConfig.toolbar.presentationModeButton.classList.add('hidden');
-=======
   function webViewerPresentationMode() {
     PDFViewerApplication.requestPresentationMode();
   }
@@ -1955,20 +1948,14 @@
   function webViewerOpenFile() {
     var openFileInputName = PDFViewerApplication.appConfig.openFileInputName;
     document.getElementById(openFileInputName).click();
->>>>>>> origin/master
   }
 
   function webViewerPrint() {
     window.print();
   }
 
-<<<<<<< HEAD
-  if (!matadataConfig["product_query_url"]) {
-    appConfig.sidebar.cartButton.classList.add('hidden');
-=======
   function webViewerDownload() {
     PDFViewerApplication.download();
->>>>>>> origin/master
   }
 
   function webViewerFirstPage() {

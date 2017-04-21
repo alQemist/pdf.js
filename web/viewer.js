@@ -139,6 +139,7 @@ function getViewerConfiguration() {
       //Cart
       cartView: document.getElementById('cartView'),
       cartCheckout: document.getElementById('cartCheckout'),
+      cartCheckoutBtn: document.getElementById('cartCheckoutBtn'),
       cartTotal: document.getElementById('cartTotal'),
       cartProducts: document.getElementById('cartProducts'),
       // attachmentsView: document.getElementById('attachmentsView'),
