@@ -77,7 +77,7 @@
           isRegex: matadataConfig['regex'] ? true : false,
           regex: regex,
           query: '__',
-          caseSensitive: false,
+          caseSensitive: true,
           highlightAll: true,
           phraseSearch: false});
       }, 50);
