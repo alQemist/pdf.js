@@ -109,6 +109,7 @@
         var appConfig = PDFViewerApplication.appConfig;
         var matadataConfig = appConfig.matadataConfig;
 
+
         // Get the document properties.
         this.pdfDocument.getMetadata().then(function (data) {
           var content = {
@@ -126,7 +127,7 @@
 
           // Show the properties in the dialog.
           for (var identifier in content) {
-            this._updateUI(this.fields[identifier], content[identifier]);
+              this._updateUI(this.fields[identifier], content[identifier]);
           }
         }.bind(this));
       },
@@ -135,8 +136,26 @@
        * @private
        */
       _updateUI: function PDFPublisherPopup_updateUI(field, content) {
+        console.log(field)
         if (field && content !== undefined && content !== '') {
-          field.textContent = content;
+          if(field.id=="publisherEmailField"){
+            var mail_to = document.createElement('a');
+            mail_to.setAttribute("href" , "mailTo:"+content);
+            mail_to.setAttribute("target" ,"#");
+            mail_to.textContent= content;
+            field.textContent="";
+            field.appendChild(mail_to);
+          }else if(field.id=="publisherWebField"){
+              var go_to = document.createElement('a');
+              go_to.setAttribute("href" , content);
+              go_to.setAttribute("target" ,"_blank");
+              go_to.textContent= content;
+              field.textContent="";
+              field.appendChild(go_to);
+            }else{
+            field.textContent = content;
+          }
+
         }
       }
     };

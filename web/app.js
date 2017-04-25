@@ -973,8 +973,8 @@
         for (key in xdata) {
           itm = key.split(":");
           if (checkIfArray(itm) && itm.length > 0 && itm[0] === "pdfx") {
-            console.log(itm[1] + "-->" + xdata[key]);
             metadataConfig[itm[1]] = xdata[key];
+            console.log(key+":"+xdata[key]);
           }
         }
         extraUIConfig();
@@ -1160,11 +1160,11 @@
         self.metadata = metadata;
 
         // Provides some basic debug information
-        console.log('PDF ' + pdfDocument.fingerprint + ' [' +
-          info.PDFFormatVersion + ' ' + (info.Producer || '-').trim() +
-          ' / ' + (info.Creator || '-').trim() + ']' +
-          ' (PDF.js: ' + (pdfjsLib.version || '-') +
-          (!pdfjsLib.PDFJS.disableWebGL ? ' [WebGL]' : '') + ')');
+        // console.log('PDF ' + pdfDocument.fingerprint + ' [' +
+        //   info.PDFFormatVersion + ' ' + (info.Producer || '-').trim() +
+        //   ' / ' + (info.Creator || '-').trim() + ']' +
+        //   ' (PDF.js: ' + (pdfjsLib.version || '-') +
+        //   (!pdfjsLib.PDFJS.disableWebGL ? ' [WebGL]' : '') + ')');
 
         var pdfTitle;
         if (metadata && metadata.has('dc:title')) {
@@ -1513,6 +1513,9 @@
       appConfig.toolbar.openFile.setAttribute('hidden', 'true');
       appConfig.secondaryToolbar.openFileButton.setAttribute('hidden', 'true');
     }
+    // disable opening another PDF
+    appConfig.toolbar.openFile.setAttribute('hidden', 'true');
+    appConfig.secondaryToolbar.openFileButton.setAttribute('hidden', 'true');
 
     var PDFJS = pdfjsLib.PDFJS;
 
@@ -1641,6 +1644,14 @@
       return true;
     };
 
+    if(valid_metadata("background_color")){
+      var bg = matadataConfig['background_color'] ;
+      $('#sidebarContainer').css("background-color",bg);
+      $('#mainContainer').css("background-color",bg);
+      $('#toolbarContainer').css("background-color",bg);
+      $('#toolbarSidebar').css("background-color",bg);
+      //matadataConfig['background_color'] = "rgba(255,0,0,1.0)";
+    }
     if (valid_metadata("allow_print")) {
       appConfig.toolbar.print.classList.remove('hidden');
     }
@@ -1666,7 +1677,8 @@
     }
 
     if (valid_metadata("page_zoom")) {
-      var zoom = parseFloat(matadataConfig["page_zoom"]);
+      console.log(matadataConfig["page_zoom"])
+      var zoom = matadataConfig["page_zoom"];
       if (zoom) {
         setTimeout(function () {
           eventBus.dispatch('scalechanged', {
@@ -1674,11 +1686,6 @@
           });
         }, 100);
       }
-    } else {
-      // Uncommnet this to hide zoom buttons and select
-      // appConfig.toolbar.scaleSelectContainer.classList.add('hidden');
-      // appConfig.toolbar.zoomIn.classList.add('hidden');
-      // appConfig.toolbar.zoomOut.classList.add('hidden');
     }
   }
 

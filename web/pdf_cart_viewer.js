@@ -50,6 +50,7 @@
      * @constructs PDFCartViewer
      * @param {PDFCartViewerOptions} options
      */
+
     function PDFCartViewer(options) {
       var me = this;
       this.cart = null;
@@ -59,19 +60,22 @@
       this.container = options.container;
       this.eventBus = options.eventBus;
 
+
+
       if (options.cartCheckoutBtn) {
         options.cartCheckoutBtn.addEventListener('click', function () {
           var total = 0;
           var price, count;
-          console.log("%c-------- Products Checkout -------", "font-weight: bolder");
+
           $.each(me.products, function (key, product) {
             count = parseInt(product.count, 10);
             price = parseFloat(product.price);
             total += price * count;
-            console.log('SKU: ' + product.sku + ' --> ' + count);
+
           });
-          console.log('Total price -> ' + total);
-          me.eventBus.dispatch('checkoutcart');
+
+          //me.eventBus.dispatch('checkoutcart');
+          me._checkout(me.products);
         });
       }
 
@@ -107,14 +111,15 @@
         var options = me.options;
         var products = me.products;
         var total = 0;
-        var price, count;
+        var price, count,description;
 
         $.each(products, function (key, product) {
           count = parseInt(product.count, 10);
           price = parseFloat(product.price);
+          description = parseFloat(product.description);
           total += price * count;
         });
-        options.cartTotal.textContent = total.toFixed(2);
+        options.cartTotal.textContent = "$ "+total.toFixed(2);
       },
 
       _createProductItem: function PDFCartViewer_createProductItem(sku_key, idx) {
@@ -123,17 +128,17 @@
         var prod_container = document.createElement('div');
         var container = document.createElement('div');
         var sku = document.createElement('div');
+        var details = document.createElement('p');
         var img = document.createElement('img');
         var count = document.createElement('input');
         var price = document.createElement('div');
-        var removeContainer = document.createElement('div');
-        var removeBtn = document.createElement('span');
+        var removeBtn = document.createElement('div');
 
         prod_container.classList.add('product_item');
         container.classList.add('item_extra');
 
         //Remove section
-        removeBtn.textContent = 'Remove';
+        removeBtn.textContent = '';
         removeBtn.addEventListener('click', function (evt) {
           me.products_SKUs.splice(idx, 1);
           delete me.products[sku_key];
@@ -141,11 +146,10 @@
           me._updateTotal();
         });
         removeBtn.classList.add('remove');
-        removeContainer.classList.add('remove_cnt');
-        removeContainer.appendChild(removeBtn);
 
         //SKU section
         sku.textContent = product.sku;
+        sku.title = product.sku;
         sku.classList.add('title');
 
         //Price section
@@ -156,12 +160,12 @@
         count.value = product.count;
         count.type = 'number';
         count.classList.add('count');
-        count.setAttribute('min', 0);
+        count.setAttribute('min', 1);
         count.addEventListener('input', function (evt) {
           var input = evt.target.value;
           if (!input) {
-            product.count = 0;
-            evt.target.value = 0;
+            product.count = 1;
+            evt.target.value = 1;
           } else {
             product.count = evt.target.value;
           }
@@ -172,12 +176,16 @@
         img.src = product.image;
         img.classList.add('image');
 
+        details.textContent = product.description.substring(0,200)+" ...";
+        details.classList.add('product_details');
+
         container.appendChild(count);
         container.appendChild(price);
-        container.appendChild(removeContainer);
+        container.appendChild(removeBtn);
 
         prod_container.appendChild(sku);
         prod_container.appendChild(img);
+        prod_container.appendChild(details);
         prod_container.appendChild(container);
         prod_container.appendChild(document.createElement('hr'));
         return prod_container;
@@ -209,7 +217,76 @@
         }
         cartProducts.appendChild(products_list);
         me._updateTotal();
-      }
+      },
+
+      _checkout: function PDFCartView_checkout(products){
+        var me = this;
+        var appConfig = PDFViewerApplication.appConfig;
+        var matadataConfig = appConfig.matadataConfig;
+        var client_id = matadataConfig['accountid'];
+        var session_id = Date.now();
+
+      	var cartXML = '<\?xml version="1.0" encoding="UTF-8" \?>\r';
+      	cartXML += "<root>"
+        cartXML += "<clientID>"+ client_id +"</clientID>";
+        cartXML += "<sessionID>"+ session_id + "</sessionID>";
+        cartXML += "<html5>1</html5>";
+      	cartXML += "<lineitems>"
+        $.each(products, function (key, product) {
+      		cartXML += "<item>";
+      		cartXML += "<qty>" + product.count + "</qty>";
+      		cartXML += "<sku>" + product.sku + "</sku>";
+      		cartXML += "<price>" + product.price + "</price>";
+      		//cartXML += "<unit>" + product.unit+ "</unit>";
+      		cartXML += "</item>";
+      	})
+      	cartXML += "</lineitems>";
+      	cartXML += "</root>";
+
+      	//console.log(cartXML)
+
+      	me._submitCart(cartXML)
+      },
+
+       _submitCart: function PDFCartView_submitCart(xml) {
+          var appConfig = PDFViewerApplication.appConfig;
+          var matadataConfig = appConfig.matadataConfig;
+
+          var me = this;
+        	var cart_url = matadataConfig['checkout_url'];
+          var client_id = matadataConfig['accountid'];
+          var proxy_url = "http://www.magazooms.com/shopping/pdforder.php";
+          var cart_data = {
+            cartcontents:xml,
+            cart_url:cart_url,
+            client_id:client_id
+          };
+
+          //console.log(cart_data);
+
+        	$.ajax({
+        		type: "POST",
+        		async: true,
+        		data: cart_data,
+        		cache: false,
+        		url: proxy_url,
+        		success: function(url){
+              //console.log(url)
+              var w = window.open(url, "_blank")
+          		setTimeout(function(){
+          			if(!w || w.closed || typeof w.closed=='undefined' || w.innerHeight < 10)
+          			{
+          				//notifyPopupBlocker()
+          			}
+          		},2000)
+            },
+        		error: function(XMLHttpRequest, textStatus, errorThrown) {
+        			console.log("responseText:" + XMLHttpRequest.responseText)
+        			console.log("textStatus:" + textStatus);
+        			console.log("errorThrown:" + errorThrown)
+        		}
+          })}
+
     };
 
     return PDFCartViewer;

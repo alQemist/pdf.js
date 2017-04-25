@@ -195,11 +195,10 @@ var TextLayerBuilder = (function TextLayerBuilderClosure() {
       var me = this;
       var appConfig = PDFViewerApplication.appConfig;
       var matadataConfig = appConfig.matadataConfig;
-      var regexColor = matadataConfig['default_color'] || '#006400';
+      var regexColor = matadataConfig['link_color'] || '#006400';
 
       var extraOptions = options || {};
       var isRegex = extraOptions.isRegex;
-
       var bidiTexts = this.textContent.items;
       var textDivs = this.textDivs;
       var prevEnd = null;
@@ -225,15 +224,20 @@ var TextLayerBuilder = (function TextLayerBuilderClosure() {
         if (className) {
           var span = document.createElement('span');
           if (extraOptions.isRegex) {
-            span.className = extraOptions.className;
+            //span.className = extraOptions.className;
+            span.classList.add("initial_regex_highlight");
+            span.classList.add("tooltip");
+            //span.classList.remove("highlight");
+            span.style.opacity = 0.5;
             span.style.backgroundColor = regexColor;
+            span.setAttribute("data-tooltip","click for details about "+content);
             span.addEventListener('click', function() {
               me.eventBus.dispatch('productdetails', {
                 sku: node.nodeValue
               });
             });
           }
-          span.className += ' ' + className;
+          //span.className += ' ' + className;
           span.appendChild(node);
           div.appendChild(span);
           return;

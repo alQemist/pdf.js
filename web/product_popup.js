@@ -214,6 +214,7 @@
             product.price = ($(this).find('price').text() - 0).toFixed(2);
             product.available = $(this).find('available').text();
             product.image = $(this).find('image').text()
+            product.unit = $(this).find('unit').text()
           });
           me.current_product = product;
           for (var identifier in product) {
@@ -277,11 +278,11 @@
         if (!appConfig.DEBUG_MODE) {
           return;
         }
-        console.log("%c-------- Trace Log -------", "font-weight: bolder");
-        console.log("Request URL -> " + xmlhttp.responseURL);
-        console.log("Request status -> " + xmlhttp.status);
-        console.log("Request status text -> " + xmlhttp.statusText);
-        console.log("Request response text -> \n" + xmlhttp.response);
+        //console.log("%c-------- Trace Log -------", "font-weight: bolder");
+        //console.log("Request URL -> " + xmlhttp.responseURL);
+        //console.log("Request status -> " + xmlhttp.status);
+        //console.log("Request status text -> " + xmlhttp.statusText);
+        //console.log("Request response text -> \n" + xmlhttp.response);
       }
     };
 

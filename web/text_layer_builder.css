@@ -20,7 +20,7 @@
   right: 0;
   bottom: 0;
   overflow: hidden;
-  opacity: 0.2;
+  opacity: 1.0;
   line-height: 1.0;
 }
 
@@ -57,15 +57,23 @@
 }
 
 .textLayer .highlight.selected {
-  background-color: rgb(0, 100, 0);
+  background-color: rgb(0, 100, 100);
 }
 
 /*Highlight result from the initial-regex search*/
-.initial_regex_highlight {
+ .initial_regex_highlight {
   cursor: pointer;
-  border: 1px solid black;
+  display: block;
+  border-radius: 2px;
+  border: 0px solid black;
   padding: 0px 0px 3px 5px !important;
   margin-left: -3px !important;
+  opacity: 0.5 !important;
+}
+.initial_regex_highlight :hover {
+  border: 4px solid black;
+  font-size: 14px;
+  background-color: red !important;;
 }
 
 .textLayer ::selection { background: rgb(0,0,255); }

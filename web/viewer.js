@@ -16,7 +16,7 @@
 
 'use strict';
 
-var DEFAULT_URL = 'Spring.pdf';
+var DEFAULT_URL = 'Hamilton50.pdf';
 // var DEFAULT_URL = 'test.pdf';
 
 if (typeof PDFJSDev !== 'undefined' && PDFJSDev.test('CHROME')) {
