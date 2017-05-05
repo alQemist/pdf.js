@@ -267,6 +267,7 @@ var PDFPageView = (function PDFPageViewClosure() {
     },
 
     cssTransform: function PDFPageView_transform(target, redrawAnnotations) {
+      return; // there is a bug with line #282 throwing an error
       var CustomStyle = pdfjsLib.CustomStyle;
 
       // Scale target (canvas or svg), its wrapper, and page container.

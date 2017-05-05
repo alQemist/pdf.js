@@ -16,7 +16,7 @@
 
 'use strict';
 
-var DEFAULT_URL = 'Hamilton50.pdf';
+var DEFAULT_URL = 'international.pdf';
 // var DEFAULT_URL = 'test.pdf';
 
 if (typeof PDFJSDev !== 'undefined' && PDFJSDev.test('CHROME')) {
@@ -95,7 +95,7 @@ function getViewerConfiguration() {
       pageRotateCcwButton: document.getElementById('pageRotateCcw'),
       toggleHandToolButton: document.getElementById('toggleHandTool'),
       publisherButton: document.getElementById('publisherInfoButton'),
-      // documentPropertiesButton: document.getElementById('documentProperties'),
+      documentPropertiesButton: document.getElementById('documentProperties'),
       shareButton: document.getElementById('shareButton'),
     },
     pageViewsToolbar: {

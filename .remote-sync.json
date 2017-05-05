@@ -1,0 +1,16 @@
+{
+  "uploadOnSave": true,
+  "useAtomicWrites": false,
+  "deleteLocal": false,
+  "hostname": "52.24.127.45",
+  "port": "22",
+  "target": "/public_html/",
+  "ignore": [
+    ".remote-sync.json",
+    ".git/**"
+  ],
+  "username": "magazooms",
+  "keyfile": "/private/etc/hosts/Users/benmarchbanks/Documents/magazooms_key.pem",
+  "watch": [],
+  "transport": "scp"
+}

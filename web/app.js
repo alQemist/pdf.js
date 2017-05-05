@@ -624,6 +624,9 @@
     },
 
     setTitleUsingUrl: function pdfViewSetTitleUsingUrl(url) {
+      this.setTitle(url);
+      return;
+
       this.url = url;
       this.baseUrl = url.split('#')[0];
       var title = getPDFFileNameFromURL(url, '');
@@ -636,7 +639,7 @@
           title = url;
         }
       }
-      this.setTitle(title);
+
     },
 
     setTitle: function pdfViewSetTitle(title) {
@@ -1644,13 +1647,17 @@
       return true;
     };
 
+
     if(valid_metadata("background_color")){
       var bg = matadataConfig['background_color'] ;
+
       $('#sidebarContainer').css("background-color",bg);
       $('#mainContainer').css("background-color",bg);
       $('#toolbarContainer').css("background-color",bg);
       $('#toolbarSidebar').css("background-color",bg);
-      //matadataConfig['background_color'] = "rgba(255,0,0,1.0)";
+      $('#overlayContainer').css("background-color",bg);
+      $('.pageViewsButton').hide();
+
     }
     if (valid_metadata("allow_print")) {
       appConfig.toolbar.print.classList.remove('hidden');
@@ -1675,6 +1682,16 @@
     if (valid_metadata("productLookup") || valid_metadata("product_query_url")) {
       appConfig.sidebar.cartButton.classList.remove('hidden');
     }
+    if (valid_metadata("title") || valid_metadata("title")) {
+
+        var doc_title = matadataConfig['company'] ;
+            doc_title += " " + matadataConfig['title'] ;
+
+        PDFViewerApplication.setTitleUsingUrl(doc_title)
+    }
+    console.log(doc_title)
+
+
 
     if (valid_metadata("page_zoom")) {
       console.log(matadataConfig["page_zoom"])
