@@ -624,7 +624,7 @@
     },
 
     setTitleUsingUrl: function pdfViewSetTitleUsingUrl(url) {
-      this.setTitle(url);
+      this.setTitle("loading");
       return;
 
       this.url = url;
@@ -1647,7 +1647,6 @@
       return true;
     };
 
-
     if(valid_metadata("background_color")){
       var bg = matadataConfig['background_color'] ;
 
@@ -1655,8 +1654,10 @@
       $('#mainContainer').css("background-color",bg);
       $('#toolbarContainer').css("background-color",bg);
       $('#toolbarSidebar').css("background-color",bg);
-      $('#overlayContainer').css("background-color",bg);
+      $('#documentPropertiesOverlay > .dialog').css("background-color",bg);
+      $('#publisherPopupOverlay > .dialog').css("background-color",bg);
       $('.pageViewsButton').hide();
+      $('#secondaryToolbar').css({backgroundColor:bg});
 
     }
     if (valid_metadata("allow_print")) {
