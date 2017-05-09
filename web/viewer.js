@@ -15,9 +15,9 @@
 /* globals chrome */
 
 'use strict';
-
-var DEFAULT_URL = 'international.pdf';
-// var DEFAULT_URL = 'test.pdf';
+//var DEFAULT_URL = 'Hamilton.pdf';
+//var DEFAULT_URL = 'international.pdf';
+//DEFAULT_URL = (!DEFAULT_URL) ? 'default.pdf' : DEFAULT_URL;
 
 if (typeof PDFJSDev !== 'undefined' && PDFJSDev.test('CHROME')) {
   (function rewriteUrlClosure() {
@@ -217,6 +217,15 @@ function getViewerConfiguration() {
         'company_email': document.getElementById('publisherEmailField'),
         'phone': document.getElementById('publisherPhoneField'),
         'weburl': document.getElementById('publisherWebField'),
+      }
+    },
+    splashPopup: {
+      overlayName: 'splashOverlay',
+      container: document.getElementById('[splashOverlay]'),
+      splashPopup: document.getElementById('splashPopup'),
+      fields: {
+        'description': document.getElementById('splashDescriptionField'),
+        'image': document.getElementById('splashImageField'),
       }
     },
     errorWrapper: {

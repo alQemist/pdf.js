@@ -57,7 +57,7 @@
       root.pdfjsWebPageViewsToolbar, root.pdfjsWebShareToolbar,
       root.pdfjsWebPasswordPrompt, root.pdfjsWebPDFPresentationMode,
       root.pdfjsWebPDFDocumentProperties, root.pdfjsWebProductPopup,
-      root.pdfjsPublisherPopup, root.pdfjsWebHandTool,
+      root.pdfjsPublisherPopup,   root.pdfjsSplashPopup,root.pdfjsWebHandTool,
       root.pdfjsWebPDFViewer, root.pdfjsWebPDFRenderingQueue,
       root.pdfjsWebPDFLinkService, root.pdfjsWebPDFOutlineViewer,
       root.pdfjsWebPDFCartViewer,
@@ -232,6 +232,8 @@
 
       Preferences.initialize();
       this.preferences = Preferences;
+
+      console.log('initialized')
 
       configure(PDFJS);
       this.appConfig = appConfig;
@@ -624,8 +626,8 @@
     },
 
     setTitleUsingUrl: function pdfViewSetTitleUsingUrl(url) {
-      this.setTitle("loading");
-      return;
+      //this.setTitle("loading");
+      //return;
 
       this.url = url;
       this.baseUrl = url.split('#')[0];
@@ -1647,19 +1649,14 @@
       return true;
     };
 
-    if(valid_metadata("background_color")){
-      var bg = matadataConfig['background_color'] ;
-
-      $('#sidebarContainer').css("background-color",bg);
-      $('#mainContainer').css("background-color",bg);
-      $('#toolbarContainer').css("background-color",bg);
-      $('#toolbarSidebar').css("background-color",bg);
-      $('#documentPropertiesOverlay > .dialog').css("background-color",bg);
-      $('#publisherPopupOverlay > .dialog').css("background-color",bg);
       $('.pageViewsButton').hide();
-      $('#secondaryToolbar').css({backgroundColor:bg});
+      $('#splashOverlay').delay(4000).animate({opacity:0},500).
+      promise().
+      done(function (){
+        $('#splashOverlay').addClass("hidden");
+        $('#overlayContainer').addClass("hidden").css({backgroundColor:'hsla(0,0%,0%,.5)'});
+      });
 
-    }
     if (valid_metadata("allow_print")) {
       appConfig.toolbar.print.classList.remove('hidden');
     }
@@ -1688,7 +1685,7 @@
         var doc_title = matadataConfig['company'] ;
             doc_title += " " + matadataConfig['title'] ;
 
-        PDFViewerApplication.setTitleUsingUrl(doc_title)
+      document.title = doc_title
     }
     console.log(doc_title)
 
@@ -2151,6 +2148,7 @@
     var shareToolbar = PDFViewerApplication.shareToolbar;
     var pageViewsToolbar = PDFViewerApplication.pageViewsToolbar;
     var publisherPopup = PDFViewerApplication.pdfPublisherPopup;
+    var splashPopup = PDFViewerApplication.pdfSplashPopup;
     var appConfig = PDFViewerApplication.appConfig;
 
     if (secondaryToolbar.isOpen) {

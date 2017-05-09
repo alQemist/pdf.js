@@ -24,6 +24,7 @@ See https://github.com/adobe-type-tools/cmap-resources
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <!--<?php echo $metaTags; ?>-->
     <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
 <!--#if GENERIC || CHROME-->
     <meta name="google" content="notranslate">
@@ -31,7 +32,7 @@ See https://github.com/adobe-type-tools/cmap-resources
 <!--#if GENERIC-->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <!--#endif-->
-    <title>PDF.js viewer</title>
+    <title>HD PDFviewer</title>
 
 <!--#if FIREFOX || MOZCENTRAL-->
 <!--#include viewer-snippet-firefox-extension.html-->
@@ -63,7 +64,7 @@ See https://github.com/adobe-type-tools/cmap-resources
 <!--#endif-->
 
 <!--#if !MINIFIED -->
-    <script src="viewer.js"></script>
+<script src="viewer.js"></script>
 <!--#else-->
 <!--#include viewer-snippet-minified.html-->
 <!--#endif-->
@@ -322,12 +323,7 @@ See https://github.com/adobe-type-tools/cmap-resources
                 </span>
               </div>
             </div>
-            <div id="loadingBar">
-              <div class="progress">
-                <div class="glimmer">
-                </div>
-              </div>
-            </div>
+
           </div>
         </div>
 
@@ -345,7 +341,7 @@ See https://github.com/adobe-type-tools/cmap-resources
         <div id="viewerContainer" tabindex="0">
 
               <div id="viewer" class="pdfViewer"></div>
-          
+
         </div>
 
         <div id="errorWrapper" hidden='true'>
@@ -368,7 +364,7 @@ See https://github.com/adobe-type-tools/cmap-resources
         </div>
       </div> <!-- mainContainer -->
 
-      <div id="overlayContainer" class="hidden">
+      <div id="overlayContainer" class="">
         <div id="passwordOverlay" class="container hidden">
           <div class="dialog">
             <div class="row">
@@ -522,6 +518,35 @@ See https://github.com/adobe-type-tools/cmap-resources
               </div>
             </div>
           </div>
+          <!--Error message  -->
+          <div id="errorPopup" class="dialog hidden">
+            <div class="row title_row">
+              <div class="title_error">Error!</div>
+              <button id="popupErrorClose" class="close_icon"> X </button>
+            </div>
+            <div class="error_body">
+              <div> Something went wrong. </div>
+              <div> Please try again. </div>
+            </div>
+          </div>
+        </div>
+
+        <!--Splash popup-->
+        <div id="splashOverlay" class="container">
+          <div id="splashPopup" class="dialog noshadow">
+            <div class="popup_body splash_div" id="splashImage">
+              <img src="<?php echo $splash; ?>" id=splash_image class=splash_image />
+            </div>
+            <div id="loadingBar">
+              <div class="progress">
+                <div class="glimmer"></div>
+              </div>
+            </div>
+                <div class="description" id="splashDescriptionField"><?php echo $splash_msg;?></div>
+            </div>
+          </div>
+
+
           <!--Error message  -->
           <div id="errorPopup" class="dialog hidden">
             <div class="row title_row">
