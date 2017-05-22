@@ -1,0 +1,336 @@
+#productPopupOverlay > .dialog {
+  background: #F0F0F0 !important;
+  text-align: left;
+  color: black !important;
+  padding: 0 !important;
+}
+
+#productPopupOverlay .row > * {
+  min-width: 100px;
+}
+
+#productPopupOverlay .product_row {
+  display: block;
+}
+
+#productPopupOverlay .title_row {
+  display: block;
+  background: #474747;
+  padding: 10px;
+  position: relative;
+}
+
+#productPopupOverlay .title {
+  display: block;
+  text-align: center !important;
+  font-size: 12px;
+  font-weight: bold;
+  color: #C5C5C5; !important;
+}
+
+#productPopupOverlay .popup_body {
+  padding: 10px 50px;
+}
+
+#productPopupOverlay .description {
+  width: 80%;
+  max-width: 500px;
+  max-height: 100px;
+  overflow-y: auto;
+  margin: auto;
+  font-size: 14px;
+}
+
+#productPopupOverlay .close_icon {
+  position: absolute;
+  background: rgba(71, 71, 71, 0.68);
+  right: -9px;
+  border-radius: 50px;
+  min-width: 0 !important;
+  display: block;
+  padding: 2px 5px;
+  border: 2px solid white;
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  top: -8px;
+}
+
+#productPopupOverlay .info {
+  text-align: center !important;
+  display: block;
+  margin: 15px 0px;
+  font-size: 18px;
+}
+
+#productPopupOverlay .info_link {
+  color: #3D8AF8;
+  font-size: 20px;
+}
+
+.info_link > span {
+  margin-left: 7px;
+  cursor: pointer;
+}
+
+.info_link > span:hover {
+  color: #2853f8;
+  font-size: 22px;
+}
+
+#productPopupOverlay .image {
+  text-align: center;
+  display: block;
+  border-radius: 10px;
+  margin: 10px auto 15px auto;
+}
+
+#productPopupOverlay .title_error {
+  display: block;
+  text-align: center !important;
+  font-size: 25px;
+  font-weight: bold;
+  color: #EF2323 !important;
+}
+
+@keyframes spin_simple {
+  to { transform: rotate(1turn); }
+}
+
+.progress_popup {
+  position: relative;
+  display: inline-block;
+  width: 5em;
+  height: 5em;
+  margin: 0 .5em;
+  font-size: 12px;
+  text-indent: 999em;
+  overflow: hidden;
+  animation: spin_simple 1s infinite steps(8);
+}
+
+#publisherPopupOverlay .title {
+    font-size: 21px;
+    text-decoration: underline;
+    margin-bottom: 15px;
+}
+
+.small.progress_popup {
+  font-size: 6px;
+}
+
+.large.progress_popup {
+  font-size: 24px;
+}
+
+.progress_popup:before,
+.progress_popup:after,
+.progress_popup > div:before,
+.progress_popup > div:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 2.25em; /* (container width - part width)/2  */
+  width: .5em;
+  height: 1.5em;
+  border-radius: .2em;
+  background: #eee;
+  box-shadow: 0 3.5em #eee; /* container height - part height */
+  transform-origin: 50% 2.5em; /* container height / 2 */
+}
+
+.progress_popup:before {
+  background: #555;
+}
+
+.progress_popup:after {
+  transform: rotate(-45deg);
+  background: #777;
+}
+
+.progress_popup > div:before {
+  transform: rotate(-90deg);
+  background: #999;
+}
+
+.progress_popup > div:after {
+  transform: rotate(-135deg);
+  background: #bbb;
+}
+.internalLink :hover{
+  background-color: rgba(50,255,50,.7);
+  background-image:none;
+}
+
+.weblink:hover{
+  border-bottom:1px solid blue;
+  background-color: none;
+  background-image:none;
+}
+
+.tooltip{
+  		position: relative;
+      opacity: 1.0 !important;
+      z-index: 97000;
+	}
+
+ .tooltip:hover:after{
+  		background: rgba(0,0,0,.8);
+  		border-radius: 5px;
+  		bottom: 24px;
+  		color: #fff;
+      font-size: 12px;
+  		content: attr(data-tooltip);
+  		left: -50%;
+  		padding: 5px 15px;
+  		position: absolute;
+  		z-index: 98000;
+      opacity: 1.0 !important;
+	}
+
+ .tooltip:hover:before{
+  		border: solid;
+  		border-color: #000 transparent;
+  		border-width: 6px 6px 0px 6px;
+  		bottom: 18px;
+  		content: "";
+  		left: 50%;
+  		position: absolute;
+  		z-index: 99000;
+      opacity: 1.0 !important;
+	}
+
+#productPopupOverlay .error_body {
+  text-align: center;
+  font-size: 12px;
+  padding: 20px;
+  line-height: 30px;
+}
+.product_checkout {
+  text-align: center;
+  margin: 10px 0px 20px 0px;
+  border-bottom: 0px solid gray;
+}
+
+.checkout_btn {
+  cursor: pointer;
+  color: #C5C5C5;
+  font-size: 12px;
+  padding: 8px;
+  width: 80%;
+  margin: 5%;
+  text-align: right;
+  background-image: url("images/register.png");
+  background-position: 7px;
+  background-size: 22px;
+  background-repeat: no-repeat;
+  border:0px solid #C5C5C5;
+  background-color: #202020;
+}
+
+.cart_amount {
+  color: #C5C5C5;
+  font-size: 12px;
+  font-weight: 600;
+  margin: 0px;
+  float:right;
+  width:45%;
+}
+
+.product_item {
+  padding: 0px 6px;
+}
+
+.product_item .image {
+  display: block;
+  max-width: 90%;
+  max-height: 250px;
+  width: 70%;
+  height: auto;
+  margin: auto auto 10px;
+  border-radius: 5px;
+  border:10px solid white;
+  opacity: .8;
+}
+
+.product_item .remove {
+  padding: 2px;
+  background-image: url('images/trash.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  border-radius: 5px;
+  margin: -4px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  float:left;
+}
+
+.product_item .remove_cnt {
+  margin: -5px 15px 15px 15px;
+  float:left;
+}
+
+.product_item .title {
+  text-align: center;
+  font-size: 12px;
+  color: #C5C5C5;
+  margin-bottom: 8px;
+  width:100%;
+}
+.product_item .product_details{
+  color: #C5C5C5;
+  padding:4px;
+  text-align: center;
+}
+.item_extra {
+  margin-top: 15px;
+}
+
+
+
+.product_item .count {
+  width: 25%;
+  text-align: center;
+  background: #CCCCCC;
+  margin: 0px 10px;
+  z-index: 10;
+  float:left;
+}
+
+.product_item .price {
+  text-align: right;
+  color: #C5C5C5;
+  font-size: 12px;
+  float: right;
+  margin-right:10px;
+}
+
+.product_item hr {
+  height: 2px;
+  background: #151414;
+  margin: 45px 0px;
+  border: #C5C5C5;
+  border-radius: 5px;
+}
+
+.safari_dropdown {
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+html[dir='ltr'] #productPopupOverlay .row > * {
+  text-align: left;
+}
+html[dir='rtl'] #productPopupOverlay .row > * {
+  text-align: right;
+}
+#productPopupOverlay .row > span {
+  width: 125px;
+  word-wrap: break-word;
+}
+
+#productPopupOverlay .buttonRow {
+  margin-top: 10px;
+}

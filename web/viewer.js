@@ -15,7 +15,7 @@
 /* globals chrome */
 
 'use strict';
-//var DEFAULT_URL = 'Hamilton.pdf';
+//var DEFAULT_URL = 'test.pdf';
 //var DEFAULT_URL = 'international.pdf';
 //DEFAULT_URL = (!DEFAULT_URL) ? 'default.pdf' : DEFAULT_URL;
 

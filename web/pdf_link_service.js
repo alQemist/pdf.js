@@ -291,6 +291,8 @@ var PDFLinkService = (function PDFLinkServiceClosure() {
         } catch (ex) {}
 
         if (typeof dest === 'string' || isValidExplicitDestination(dest)) {
+
+
           if (this.pdfHistory) {
             this.pdfHistory.updateNextHashParam(dest);
           }
@@ -307,6 +309,7 @@ var PDFLinkService = (function PDFLinkServiceClosure() {
      */
     executeNamedAction: function PDFLinkService_executeNamedAction(action) {
       // See PDF reference, table 8.45 - Named action
+
       switch (action) {
         case 'GoBack':
           if (this.pdfHistory) {

@@ -592,7 +592,7 @@ gulp.task('generic', ['buildnumber', 'locale'], function () {
     preprocessCSS('web/viewer.css', 'generic', defines, true)
         .pipe(gulp.dest(GENERIC_DIR + 'web')),
 
-    gulp.src('web/compressed.tracemonkey-pldi-09.pdf')
+    gulp.src('web/test.pdf')
         .pipe(gulp.dest(GENERIC_DIR + 'web')),
   ]);
 });

@@ -979,7 +979,6 @@
           itm = key.split(":");
           if (checkIfArray(itm) && itm.length > 0 && itm[0] === "pdfx") {
             metadataConfig[itm[1]] = xdata[key];
-            console.log(key+":"+xdata[key]);
           }
         }
         extraUIConfig();

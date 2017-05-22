@@ -299,6 +299,8 @@ var LinkAnnotationElement = (function LinkAnnotationElementClosure() {
       this.container.className = 'linkAnnotation';
 
       var link = document.createElement('a');
+      //console.log(this.data)
+
       addLinkAttributes(link, {
         url: this.data.url,
         target: (this.data.newWindow ? LinkTarget.BLANK : undefined),
@@ -307,9 +309,17 @@ var LinkAnnotationElement = (function LinkAnnotationElementClosure() {
       if (!this.data.url) {
         if (this.data.action) {
           this._bindNamedAction(link, this.data.action);
-        } else {
+        }else if (this.data.unsafeUrl) {
+          this.container.classList.add("tooltip");
+          this.container.classList.add("productLink");
+          this.container.setAttribute("data-tooltip",this.data.unsafeUrl.split('.')[1]);
+          this._bindProductPopup(link,this.data.unsafeUrl);
+        }
+        else {
           this._bindLink(link, this.data.dest);
         }
+      }else{
+        this.container.classList.add("weblink");
       }
 
       this.container.appendChild(link);
@@ -326,7 +336,6 @@ var LinkAnnotationElement = (function LinkAnnotationElementClosure() {
      */
     _bindLink: function LinkAnnotationElement_bindLink(link, destination) {
       var self = this;
-
       link.href = this.linkService.getDestinationHash(destination);
       link.onclick = function() {
         if (destination) {
@@ -347,18 +356,37 @@ var LinkAnnotationElement = (function LinkAnnotationElementClosure() {
      * @param {Object} action
      * @memberof LinkAnnotationElement
      */
-    _bindNamedAction:
-        function LinkAnnotationElement_bindNamedAction(link, action) {
-      var self = this;
 
+    _bindNamedAction:function LinkAnnotationElement_bindNamedAction(link, action) {
+      var self = this;
       link.href = this.linkService.getAnchorUrl('');
       link.onclick = function() {
         self.linkService.executeNamedAction(action);
         return false;
       };
       link.className = 'internalLink';
+    },
+    /**
+     * Bind named actions to the link element.
+     *
+     * @private
+     * @param {Object} link
+     * @param {Object} action
+     * @memberof LinkAnnotationElement
+     */
+    _bindProductPopup:function LinkAnnotationElement_bindProductPopup(link, action) {
+          var self = this;
+          var sku = action.split('.')[1]
+
+          link.addEventListener('click', function() {
+            event.preventDefault();
+            PDFViewerApplication.eventBus.dispatch('productdetails', {sku: sku})
+          });
+            return false;
+
     }
   });
+
 
   return LinkAnnotationElement;
 })();

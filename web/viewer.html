@@ -25,7 +25,7 @@ See https://github.com/adobe-type-tools/cmap-resources
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <!--<?php echo $metaTags; ?>-->
-    <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+    <script src="https://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
 <!--#if GENERIC || CHROME-->
     <meta name="google" content="notranslate">
 <!--#endif-->
@@ -64,6 +64,21 @@ See https://github.com/adobe-type-tools/cmap-resources
 <!--#endif-->
 
 <!--#if !MINIFIED -->
+<script>
+var  DEFAULT_URL ="test.pdf";
+
+$(document).ready(function(){
+  var x = window.location.href;
+  if(x.toString().indexOf("localhost")==-1){
+    DEFAULT_URL ="<?php echo $PDF ;?>";
+	  var obj =  $('#splash_image');
+	  obj.attr('src' ,"<?php echo $splash ;?>")
+  }
+  $('#splashOverlay').delay(100).animate({opacity:1},2000);
+})
+
+</script>
+
 <script src="viewer.js"></script>
 <!--#else-->
 <!--#include viewer-snippet-minified.html-->
@@ -535,7 +550,7 @@ See https://github.com/adobe-type-tools/cmap-resources
         <div id="splashOverlay" class="container">
           <div id="splashPopup" class="dialog noshadow">
             <div class="popup_body splash_div" id="splashImage">
-              <img src="<?php echo $splash; ?>" id=splash_image class=splash_image />
+              <img src="images/mzlogo.png" id=splash_image class=splash_image />
             </div>
             <div id="loadingBar">
               <div class="progress">
